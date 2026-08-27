@@ -12,7 +12,6 @@ import com.movieticket.util.IdGenerator;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class ShowService {
 
@@ -22,7 +21,7 @@ public class ShowService {
     private final MovieService movieService;
 
     public ShowService(ShowRepository showRepository, ShowSeatRepository showSeatRepository,
-                       ScreenService screenService, MovieService movieService) {
+            ScreenService screenService, MovieService movieService) {
         this.showRepository = showRepository;
         this.showSeatRepository = showSeatRepository;
         this.screenService = screenService;
@@ -30,9 +29,9 @@ public class ShowService {
     }
 
     public Show addShow(long adminId, long theatreId, long screenId, long movieId,
-                        LocalDateTime start, LocalDateTime end, TicketPricing pricing) {
+            LocalDateTime start, LocalDateTime end, TicketPricing pricing) {
         Screen screen = screenService.getOwnedScreenOrThrow(screenId, adminId);
-        
+
         if (screen.getTheatreId() != theatreId) {
             throw new ValidationException("Selected screen does not belong to the selected theatre.");
         }
@@ -59,7 +58,7 @@ public class ShowService {
         Show show = new Show(IdGenerator.nextShowId(), movieId, screenId, start, end, pricing);
         showRepository.save(show);
 
-        List<Long> seatIds = screen.getAllSeats().stream().map(Seat::getSeatId).collect(Collectors.toList());
+        List<Long> seatIds = screen.getAllSeats().stream().map(Seat::getSeatId).toList();
         showSeatRepository.initializeForShow(show.getShowId(), seatIds);
 
         return show;
@@ -86,7 +85,7 @@ public class ShowService {
         return showRepository.findAll().stream()
                 .filter(Show::isActive)
                 .filter(s -> s.isUpcomingOrOngoing(now))
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public List<Show> viewUpcomingShowsForMovie(long movieId) {
@@ -94,7 +93,7 @@ public class ShowService {
         return showRepository.findByMovieId(movieId).stream()
                 .filter(Show::isActive)
                 .filter(s -> s.isUpcomingOrOngoing(now))
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public List<Show> viewShowsForAdmin(long adminId) {

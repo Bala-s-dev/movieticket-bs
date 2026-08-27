@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 public class LocalScreenRepository implements ScreenRepository {
 
@@ -34,7 +33,7 @@ public class LocalScreenRepository implements ScreenRepository {
     public List<Screen> findByTheatreId(long theatreId) {
         return screens.values().stream()
                 .filter(s -> s.getTheatreId() == theatreId)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override

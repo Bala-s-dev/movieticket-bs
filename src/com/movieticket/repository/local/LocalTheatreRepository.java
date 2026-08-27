@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 public class LocalTheatreRepository implements TheatreRepository {
 
@@ -34,7 +33,7 @@ public class LocalTheatreRepository implements TheatreRepository {
     public List<Theatre> findByAdminId(long adminId) {
         return theatres.values().stream()
                 .filter(t -> t.getAdminId() == adminId)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override

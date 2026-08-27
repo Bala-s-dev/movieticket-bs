@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 public class LocalShowSeatRepository implements ShowSeatRepository {
 
@@ -36,7 +35,7 @@ public class LocalShowSeatRepository implements ShowSeatRepository {
         Map<Long, ShowSeat> forShow = showSeats.get(showId);
         if (forShow == null)
             return new ArrayList<>();
-        return forShow.values().stream().collect(Collectors.toList());
+        return forShow.values().stream().toList();
     }
 
     @Override

@@ -32,8 +32,8 @@ public class ReportService {
     private final MovieRepository movieRepository;
 
     public ReportService(BookingRepository bookingRepository, ShowRepository showRepository,
-                         ScreenRepository screenRepository, TheatreRepository theatreRepository,
-                         MovieRepository movieRepository) {
+            ScreenRepository screenRepository, TheatreRepository theatreRepository,
+            MovieRepository movieRepository) {
         this.bookingRepository = bookingRepository;
         this.showRepository = showRepository;
         this.screenRepository = screenRepository;
@@ -41,7 +41,6 @@ public class ReportService {
         this.movieRepository = movieRepository;
     }
 
-    /** One line of a revenue breakdown (per movie or per theatre). */
     public static class RevenueLine {
         private final String label;
         private double amount;
@@ -52,10 +51,21 @@ public class ReportService {
             this.label = label;
         }
 
-        public String getLabel() { return label; }
-        public double getAmount() { return amount; }
-        public int getTicketsSold() { return ticketsSold; }
-        public int getBookingCount() { return bookingCount; }
+        public String getLabel() {
+            return label;
+        }
+
+        public double getAmount() {
+            return amount;
+        }
+
+        public int getTicketsSold() {
+            return ticketsSold;
+        }
+
+        public int getBookingCount() {
+            return bookingCount;
+        }
 
         void add(double amount, int seats) {
             this.amount += amount;
@@ -78,22 +88,36 @@ public class ReportService {
             this.toDate = toDate;
         }
 
-        public LocalDate getFromDate() { return fromDate; }
-        public LocalDate getToDate() { return toDate; }
-        public double getTotalRevenue() { return totalRevenue; }
-        public int getTotalBookings() { return totalBookings; }
-        public int getTotalTicketsSold() { return totalTicketsSold; }
+        public LocalDate getFromDate() {
+            return fromDate;
+        }
+
+        public LocalDate getToDate() {
+            return toDate;
+        }
+
+        public double getTotalRevenue() {
+            return totalRevenue;
+        }
+
+        public int getTotalBookings() {
+            return totalBookings;
+        }
+
+        public int getTotalTicketsSold() {
+            return totalTicketsSold;
+        }
 
         public List<RevenueLine> getByMovieSorted() {
             return byMovie.values().stream()
                     .sorted(Comparator.comparingDouble(RevenueLine::getAmount).reversed())
-                    .collect(Collectors.toList());
+                    .toList();
         }
 
         public List<RevenueLine> getByTheatreSorted() {
             return byTheatre.values().stream()
                     .sorted(Comparator.comparingDouble(RevenueLine::getAmount).reversed())
-                    .collect(Collectors.toList());
+                    .toList();
         }
     }
 
@@ -108,7 +132,6 @@ public class ReportService {
         LocalDateTime rangeStart = fromDate.atStartOfDay();
         LocalDateTime rangeEnd = toDate.atTime(23, 59, 59);
 
-        // Resolve the set of screens/shows this admin actually owns.
         Set<Long> ownedTheatreIds = theatreRepository.findByAdminId(adminId).stream()
                 .map(Theatre::getTheatreId)
                 .collect(Collectors.toSet());
@@ -123,7 +146,6 @@ public class ReportService {
 
         RevenueReport report = new RevenueReport(fromDate, toDate);
 
-        // Cache theatre/movie lookups to avoid repeated repository scans.
         Map<Long, Theatre> theatreCache = new HashMap<>();
         Map<Long, Movie> movieCache = new HashMap<>();
 
@@ -138,7 +160,7 @@ public class ReportService {
             }
             Show show = ownedShowsById.get(booking.getShowId());
             if (show == null) {
-                continue; // Not one of this admin's shows.
+                continue; 
             }
 
             Screen screen = ownedScreensById.get(show.getScreenId());
