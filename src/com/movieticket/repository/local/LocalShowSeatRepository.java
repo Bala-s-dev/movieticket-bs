@@ -16,9 +16,16 @@ public class LocalShowSeatRepository implements ShowSeatRepository {
 
     @Override
     public ShowSeat save(ShowSeat showSeat) {
-        showSeats
-                .computeIfAbsent(showSeat.getShowId(), k -> new HashMap<>())
-                .put(showSeat.getSeatId(), showSeat);
+        long showId = showSeat.getShowId();
+        long seatId = showSeat.getSeatId();
+
+        Map<Long, ShowSeat> forShow = showSeats.get(showId);
+        if (forShow == null) {
+            forShow = new HashMap<>();
+            showSeats.put(showId, forShow);
+        }
+
+        forShow.put(seatId, showSeat);
         return showSeat;
     }
 
@@ -40,9 +47,16 @@ public class LocalShowSeatRepository implements ShowSeatRepository {
 
     @Override
     public void initializeForShow(long showId, List<Long> seatIds) {
-        Map<Long, ShowSeat> forShow = showSeats.computeIfAbsent(showId, k -> new HashMap<>());
+        Map<Long, ShowSeat> forShow = showSeats.get(showId);
+        if (forShow == null) {
+            forShow = new HashMap<>();
+            showSeats.put(showId, forShow);
+        }
+        
         for (Long seatId : seatIds) {
-            forShow.putIfAbsent(seatId, new ShowSeat(showId, seatId));
+            if (!forShow.containsKey(seatId)) {
+                forShow.put(seatId, new ShowSeat(showId, seatId));
+            }
         }
     }
 }

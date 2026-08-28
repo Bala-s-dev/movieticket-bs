@@ -46,7 +46,6 @@ public class Main {
 
         MainMenuController mainMenuController = new MainMenuController(userController, adminController, input);
 
-
         mainMenuController.run();
         scanner.close();
     }

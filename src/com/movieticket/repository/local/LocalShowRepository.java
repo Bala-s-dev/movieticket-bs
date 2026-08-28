@@ -45,6 +45,10 @@ public class LocalShowRepository implements ShowRepository {
 
     @Override
     public void deleteById(long id) {
-        shows.remove(id);
+        if(shows.containsKey(id)){
+            shows.remove(id);
+        } else {
+            throw new IllegalArgumentException("Show with id " + id + " does not exist.");
+        }
     }
 }

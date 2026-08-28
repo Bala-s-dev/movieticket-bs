@@ -56,7 +56,19 @@ public class ScreenController {
             List<ScreenService.RowConfig> rowConfigs = new ArrayList<>();
             for (int i = 0; i < rowCount; i++) {
                 System.out.println("--- Row " + (i + 1) + " ---");
-                String rowLetterStr = input.readNonEmptyString("Row letter (e.g. A): ").toUpperCase();
+                String rowLetterStr = input.readNonEmptyString("Row letter (e.g. A): or Press Enter to use default").toUpperCase();
+                
+                if (rowLetterStr.isEmpty()) {
+                    rowLetterStr = String.valueOf((char) ('A' + i));
+                    System.out.println("Using default row letter: " + rowLetterStr);
+                }
+
+                if (rowLetterStr.length() != 1 || !Character.isLetter(rowLetterStr.charAt(0))) {
+                    ConsoleUtil.printError("Invalid row letter. Please enter a single letter (A-Z).");
+                    i--; 
+                    continue;
+                }
+
                 char rowLetter = rowLetterStr.charAt(0);
                 SeatCategory category = readCategory();
                 int seatCount = input.readInt("Number of seats in row " + rowLetter + ": ");
