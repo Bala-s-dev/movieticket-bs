@@ -38,7 +38,7 @@ public class ScreenController {
                 case 1 -> addScreen(admin);
                 case 2 -> removeScreen(admin);
                 case 3 -> viewScreens(admin);
-                case 4 -> viewSeatLayout();
+                case 4 -> viewSeatLayout(admin);
                 case 5 -> back = true;
                 default -> System.out.println("Invalid choice. Please try again.");
             }
@@ -131,10 +131,10 @@ public class ScreenController {
         }
     }
 
-    private void viewSeatLayout() {
+    private void viewSeatLayout(Admin admin) {
         try {
             long screenId = input.readLong("Enter Screen ID: ");
-            Screen screen = screenService.getScreenOrThrow(screenId);
+            Screen screen = screenService.getScreenOrThrow(screenId, admin.getAdminId());
             printSeatLayout(screen);
         } catch (ApplicationException e) {
             ConsoleUtil.printError(e.getMessage());

@@ -80,8 +80,15 @@ public class ScreenService {
                 .orElseThrow(() -> new ResourceNotFoundException("Screen not found with ID: " + screenId));
     }
 
+    public Screen getScreenOrThrow(long screenId, long adminId) {
+        Screen screen = screenRepository.findById(screenId)
+                .orElseThrow(() -> new ResourceNotFoundException("Screen not found with ID: " + screenId));
+        theatreService.getOwnedTheatreOrThrow(screen.getTheatreId(), adminId);
+        return screen;
+    }
+
     public Screen getOwnedScreenOrThrow(long screenId, long adminId) {
-        Screen screen = getScreenOrThrow(screenId);
+        Screen screen = getScreenOrThrow(screenId, adminId);
         theatreService.getOwnedTheatreOrThrow(screen.getTheatreId(), adminId);
         return screen;
     }
