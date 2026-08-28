@@ -12,6 +12,7 @@ import com.movieticket.util.InputUtil;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 
 public class ScreenController {
 
@@ -54,14 +55,17 @@ public class ScreenController {
                 return;
             }
             List<ScreenService.RowConfig> rowConfigs = new ArrayList<>();
+            Scanner sc = new Scanner(System.in);
             for (int i = 0; i < rowCount; i++) {
                 System.out.println("--- Row " + (i + 1) + " ---");
-                String rowLetterStr = input.readNonEmptyString("Row letter (e.g. A): or Press Enter to use default").toUpperCase();
-                
-                if (rowLetterStr.isEmpty()) {
+                System.out.print("Row letter (A-Z) [ P 1 to use default: " + (char) ('A' + i) + "]: ");
+                String rowLetterStr = sc.next().trim();
+
+                if(Integer.parseInt(rowLetterStr) == 1) {
                     rowLetterStr = String.valueOf((char) ('A' + i));
                     System.out.println("Using default row letter: " + rowLetterStr);
                 }
+                
 
                 if (rowLetterStr.length() != 1 || !Character.isLetter(rowLetterStr.charAt(0))) {
                     ConsoleUtil.printError("Invalid row letter. Please enter a single letter (A-Z).");
@@ -69,11 +73,12 @@ public class ScreenController {
                     continue;
                 }
 
-                char rowLetter = rowLetterStr.charAt(0);
+                char rowLetter = rowLetterStr.toUpperCase().charAt(0);
                 SeatCategory category = readCategory();
                 int seatCount = input.readInt("Number of seats in row " + rowLetter + ": ");
                 rowConfigs.add(new ScreenService.RowConfig(rowLetter, category, seatCount));
             }
+            sc.close();
             Screen screen = screenService.addScreen(theatreId, admin.getAdminId(), screenName, rowConfigs);
             ConsoleUtil.printSuccess("Screen added successfully with ID: " + screen.getScreenId() +
                     " (" + screen.getTotalSeatCount() + " seats)");

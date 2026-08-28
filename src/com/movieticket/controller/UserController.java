@@ -290,6 +290,6 @@ public class UserController {
             System.out.println(sb.toString().trim());
         }
         System.out.println();
-        System.out.println("[label] = available   [XX] = booked   [**] = selected");
+        System.out.println("[label] = available   [XX] = booked");
     }
 }
