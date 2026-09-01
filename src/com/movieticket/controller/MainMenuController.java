@@ -1,6 +1,9 @@
 package com.movieticket.controller;
 
+import java.sql.SQLException;
+
 import com.movieticket.util.ConsoleUtil;
+import com.movieticket.util.DatabaseManager;
 import com.movieticket.util.InputUtil;
 
 public class MainMenuController {
@@ -16,6 +19,15 @@ public class MainMenuController {
     }
 
     public void run() {
+        
+        try {
+            DatabaseManager.testConnection();
+            System.out.println("Connected to MySQL successfully.");
+        } catch (SQLException | IllegalStateException e) {
+            System.out.println("Could not connect to MySQL: " + e.getMessage());
+            System.out.println("Falling back to Local mode.");
+        }
+
         boolean exit = false;
         while (!exit) {
             ConsoleUtil.printHeader("MOVIE TICKET BOOKING SYSTEM");
