@@ -17,9 +17,18 @@ public class Admin {
         this.password = password;
     }
 
-    public long getAdminId() { return adminId; }
-    public String getName() { return name; }
-    public String getEmail() { return email; }
+    public long getAdminId(){ 
+        return adminId; 
+    }
+
+    public String getName() { 
+        return name; 
+    }
+
+    public String getEmail() { 
+        return email; 
+    }
+    
     public String getPhone() { return phone; }
     public String getPassword() { return password; }
 

@@ -31,13 +31,13 @@ public class Main {
         ShowService showService = new ShowService(showRepository, showSeatRepository, screenService, movieService);
         BookingService bookingService = new BookingService(bookingRepository, showSeatRepository, showService,
                 screenService);
+        ReportService reportService = new ReportService(bookingRepository, showRepository, screenRepository,
+                theatreRepository, movieRepository);
 
         MovieController movieController = new MovieController(movieService, input);
         TheatreController theatreController = new TheatreController(theatreService, input);
         ScreenController screenController = new ScreenController(screenService, input);
         ShowController showController = new ShowController(showService, movieService, pricingConfigService, input);
-        ReportService reportService = new ReportService(bookingRepository, showRepository, screenRepository,
-                theatreRepository, movieRepository);
         ReportController reportController = new ReportController(reportService, input);
         AdminController adminController = new AdminController(authService, movieController, theatreController,
                 screenController, showController, reportController, input);
