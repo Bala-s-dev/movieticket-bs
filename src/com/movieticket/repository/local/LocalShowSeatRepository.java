@@ -16,10 +16,12 @@ public class LocalShowSeatRepository implements ShowSeatRepository {
 
     @Override
     public ShowSeat save(ShowSeat showSeat) {
+ 
         long showId = showSeat.getShowId();
         long seatId = showSeat.getSeatId();
 
         Map<Long, ShowSeat> forShow = showSeats.get(showId);
+
         if (forShow == null) {
             forShow = new HashMap<>();
             showSeats.put(showId, forShow);
@@ -31,32 +33,42 @@ public class LocalShowSeatRepository implements ShowSeatRepository {
 
     @Override
     public Optional<ShowSeat> findByShowIdAndSeatId(long showId, long seatId) {
+
         Map<Long, ShowSeat> forShow = showSeats.get(showId);
+
         if (forShow == null)
             return Optional.empty();
+
         return Optional.ofNullable(forShow.get(seatId));
     }
 
     @Override
     public List<ShowSeat> findByShowId(long showId) {
+
         Map<Long, ShowSeat> forShow = showSeats.get(showId);
+
         if (forShow == null)
             return new ArrayList<>();
+
         return forShow.values().stream().toList();
     }
 
     @Override
     public void initializeForShow(long showId, List<Long> seatIds) {
+
         Map<Long, ShowSeat> forShow = showSeats.get(showId);
+
         if (forShow == null) {
             forShow = new HashMap<>();
             showSeats.put(showId, forShow);
         }
         
         for (Long seatId : seatIds) {
+            
             if (!forShow.containsKey(seatId)) {
                 forShow.put(seatId, new ShowSeat(showId, seatId));
             }
+            
         }
     }
 }

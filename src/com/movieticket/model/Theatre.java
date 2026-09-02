@@ -1,6 +1,7 @@
 package com.movieticket.model;
 
 public class Theatre {
+
     private final long theatreId;
     private String name;
     private String location;
@@ -15,15 +16,37 @@ public class Theatre {
         this.active = true;
     }
 
-    public long getTheatreId() { return theatreId; }
-    public String getName() { return name; }
-    public String getLocation() { return location; }
-    public long getAdminId() { return adminId; }
-    public boolean isActive() { return active; }
+    public long getTheatreId() { 
+        return theatreId; 
+    }
 
-    public void setName(String name) { this.name = name; }
-    public void setLocation(String location) { this.location = location; }
-    public void setActive(boolean active) { this.active = active; }
+    public String getName() { 
+        return name; 
+    }
+
+    public String getLocation() { 
+        return location; 
+    }
+
+    public long getAdminId() { 
+        return adminId; 
+    }
+    
+    public boolean isActive() { 
+        return active; 
+    }
+
+    public void setName(String name) { 
+        this.name = name; 
+    }
+
+    public void setLocation(String location) { 
+        this.location = location; 
+    }
+
+    public void setActive(boolean active) { 
+        this.active = active; 
+    }
 
     @Override
     public String toString() {

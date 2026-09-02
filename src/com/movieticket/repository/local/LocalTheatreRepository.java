@@ -15,6 +15,11 @@ public class LocalTheatreRepository implements TheatreRepository {
 
     @Override
     public Theatre save(Theatre theatre) {
+        
+        if(theatre == null){
+            throw new IllegalArgumentException("Theatre cannot be null.");
+        }
+
         theatres.put(theatre.getTheatreId(), theatre);
         return theatre;
     }

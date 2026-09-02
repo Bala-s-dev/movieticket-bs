@@ -3,6 +3,7 @@ package com.movieticket.model;
 import java.util.Objects;
 
 public class User {
+
     private final long userId;
     private String name;
     private String email;
@@ -17,15 +18,37 @@ public class User {
         this.password = password;
     }
 
-    public long getUserId() { return userId; }
-    public String getName() { return name; }
-    public String getEmail() { return email; }
-    public String getPhone() { return phone; }
-    public String getPassword() { return password; }
+    public long getUserId() { 
+        return userId; 
+    }
 
-    public void setName(String name) { this.name = name; }
-    public void setPhone(String phone) { this.phone = phone; }
-    public void setPassword(String password) { this.password = password; }
+    public String getName() { 
+        return name; 
+    }
+
+    public String getEmail() { 
+        return email; 
+    }
+
+    public String getPhone() { 
+        return phone; 
+    }
+
+    public String getPassword() { 
+        return password; 
+    }
+
+    public void setName(String name) { 
+        this.name = name; 
+    }
+    
+    public void setPhone(String phone) { 
+        this.phone = phone; 
+    }   
+
+    public void setPassword(String password) { 
+        this.password = password; 
+    }
 
     public boolean checkPassword(String rawPassword) {
         return Objects.equals(this.password, rawPassword);

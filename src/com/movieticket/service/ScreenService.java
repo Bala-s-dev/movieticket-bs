@@ -45,14 +45,17 @@ public class ScreenService {
         if (screenName == null || screenName.trim().isEmpty()) {
             throw new ValidationException("Screen name cannot be empty.");
         }
+
         boolean duplicateName = screenRepository.findByTheatreId(theatreId).stream()
                 .anyMatch(s -> s.isActive() && s.getScreenName().equalsIgnoreCase(screenName));
         if (duplicateName) {
             throw new ValidationException("A screen with this name already exists in theatre '" + theatre.getName() + "'.");
         }
+        
         if (rowConfigs == null || rowConfigs.isEmpty()) {
             throw new ValidationException("At least one row must be configured.");
         }
+
         for (RowConfig rc : rowConfigs) {
             if (rc.seatCount <= 0) {
                 throw new ValidationException("Every row must have at least one seat.");
@@ -60,6 +63,7 @@ public class ScreenService {
         }
 
         Screen screen = new Screen(IdGenerator.nextScreenId(), screenName, theatreId);
+
         for (RowConfig rc : rowConfigs) {
             List<Seat> seats = new ArrayList<>();
             for (int i = 1; i <= rc.seatCount; i++) {

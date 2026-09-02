@@ -41,9 +41,11 @@ public class ShowService {
         if (start == null || end == null) {
             throw new ValidationException("Show start and end time must be provided.");
         }
+
         if (!start.isBefore(end)) {
             throw new ValidationException("Show start time must be before end time.");
         }
+        
         if (pricing == null) {
             throw new ValidationException("Pricing must be configured for the show.");
         }

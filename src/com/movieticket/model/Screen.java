@@ -37,11 +37,11 @@ public class Screen {
     }
 
     public List<Seat> getAllSeats() {
-        List<Seat> all = new ArrayList<>();
+        List<Seat> allSeats = new ArrayList<>();
         for (List<Seat> rowSeats : seatLayout.values()) {
-            all.addAll(rowSeats);
+            allSeats.addAll(rowSeats);
         }
-        return all;
+        return allSeats;
     }
 
     public int getTotalSeatCount() {

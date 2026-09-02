@@ -7,7 +7,6 @@ import com.movieticket.service.*;
 import com.movieticket.util.ConsoleUtil;
 import com.movieticket.util.DateTimeUtil;
 import com.movieticket.util.InputUtil;
-import com.movieticket.util.validateUtil;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -62,10 +61,8 @@ public class UserController {
 
     public void loginFlow() {
         ConsoleUtil.printHeader("USER LOGIN");
-        String email = input.readString("Email: ");
-        validateUtil.validateEmail(email);
-        String password = input.readString("Password: ");
-        validateUtil.validatePassword(password);
+        String email = input.readNonEmptyStringWithValidation("Email: ", "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", "Invalid email. Please enter a valid email.");
+        String password = input.readNonEmptyStringWithValidation("Password: ", "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$", "Invalid password. Please enter a valid password.");
         loginUser(email, password);
     }
 

@@ -3,6 +3,7 @@ package com.movieticket.model;
 import java.time.LocalDateTime;
 
 public class Show {
+    
     private final long showId;
     private final long movieId;
     private final long screenId;
@@ -22,15 +23,37 @@ public class Show {
         this.active = true;
     }
 
-    public long getShowId() { return showId; }
-    public long getMovieId() { return movieId; }
-    public long getScreenId() { return screenId; }
-    public LocalDateTime getStartDateTime() { return startDateTime; }
-    public LocalDateTime getEndDateTime() { return endDateTime; }
-    public TicketPricing getPricing() { return pricing; }
-    public boolean isActive() { return active; }
+    public long getShowId() { 
+        return showId; 
+    }
+    
+    public long getMovieId() { 
+        return movieId; 
+    }
 
-    public void setActive(boolean active) { this.active = active; }
+    public long getScreenId() { 
+        return screenId; 
+    }
+
+    public LocalDateTime getStartDateTime() { 
+        return startDateTime; 
+    }
+
+    public LocalDateTime getEndDateTime() { 
+        return endDateTime; 
+    }
+
+    public TicketPricing getPricing() { 
+        return pricing; 
+    }
+
+    public boolean isActive() { 
+        return active; 
+    }
+
+    public void setActive(boolean active) { 
+        this.active = active; 
+    }
 
     public boolean overlapsWith(LocalDateTime otherStart, LocalDateTime otherEnd) {
         return startDateTime.isBefore(otherEnd) && otherStart.isBefore(endDateTime);

@@ -5,7 +5,6 @@ import com.movieticket.model.Movie;
 import com.movieticket.service.MovieService;
 import com.movieticket.util.ConsoleUtil;
 import com.movieticket.util.InputUtil;
-import com.movieticket.util.validateUtil;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -46,9 +45,7 @@ public class MovieController {
             String name = input.readNonEmptyString("Movie name: ");
             String description = input.readString("Description: ");
             String language = input.readNonEmptyString("Language: ");
-            validateUtil.validateName(language);
             String genre = input.readNonEmptyString("Genre: ");
-            validateUtil.validateName(genre);
             int duration = input.readInt("Duration (minutes): ");
             LocalDate releaseDate = input.readDate("Release date");
             double rating = input.readDouble("Rating (0-10): ");

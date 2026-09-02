@@ -5,7 +5,6 @@ import com.movieticket.model.Admin;
 import com.movieticket.service.AuthService;
 import com.movieticket.util.ConsoleUtil;
 import com.movieticket.util.InputUtil;
-import com.movieticket.util.validateUtil;
 
 public class AdminController {
 
@@ -59,11 +58,11 @@ public class AdminController {
     }
 
     public void loginFlow() {
-        ConsoleUtil.printHeader("ADMIN LOGIN");
-        String email = input.readString("Email: ");
-        validateUtil.validateEmail(email);
-        String password = input.readString("Password: ");
-        validateUtil.validatePassword(password);
+        
+        ConsoleUtil.printHeader("ADMIN LOGIN");     
+        
+        String email = input.readNonEmptyStringWithValidation("Email: ", "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", "Invalid email. Please enter a valid email.");
+        String password = input.readNonEmptyStringWithValidation("Password: ", "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$", "Invalid password. Please enter a valid password.");
 
         loginAdmin(email, password);
         

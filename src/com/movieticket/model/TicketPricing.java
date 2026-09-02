@@ -5,8 +5,8 @@ import com.movieticket.enums.SeatCategory;
 import java.util.EnumMap;
 import java.util.Map;
 
-
 public class TicketPricing {
+
     private final Map<SeatCategory, Double> priceByCategory = new EnumMap<>(SeatCategory.class);
 
     public TicketPricing(double gold, double platinum, double silver) {

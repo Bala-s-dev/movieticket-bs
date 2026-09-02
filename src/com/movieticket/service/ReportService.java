@@ -151,21 +151,27 @@ public class ReportService {
 
         List<Booking> allBookings = bookingRepository.findAll();
         for (Booking booking : allBookings) {
+
             if (booking.getStatus() != BookingStatus.CONFIRMED) {
                 continue;
             }
+
             LocalDateTime bookedAt = booking.getBookingDateTime();
             if (bookedAt.isBefore(rangeStart) || bookedAt.isAfter(rangeEnd)) {
                 continue;
             }
+
             Show show = ownedShowsById.get(booking.getShowId());
+            
             if (show == null) {
-                continue; 
-            }
+                continue;
+                }
 
             Screen screen = ownedScreensById.get(show.getScreenId());
+            
             Theatre theatre = theatreCache.computeIfAbsent(screen.getTheatreId(),
                     id -> theatreRepository.findById(id).orElse(null));
+                    
             Movie movie = movieCache.computeIfAbsent(show.getMovieId(),
                     id -> movieRepository.findById(id).orElse(null));
 

@@ -24,28 +24,37 @@ public class MovieService {
 
     public Movie addMovie(String name, String description, String language, String genre,
                           int durationMinutes, LocalDate releaseDate, double rating) {
+
         if (name == null || name.trim().isEmpty()) {
             throw new ValidationException("Movie name cannot be empty.");
         }
+
         if (durationMinutes <= 0) {
             throw new ValidationException("Movie duration must be positive.");
         }
+
         if (rating < 0 || rating > 10) {
             throw new ValidationException("Rating must be between 0 and 10.");
         }
+
         if (releaseDate == null) {
             throw new ValidationException("Release date must be valid.");
         }
+
         Movie movie = new Movie(IdGenerator.nextMovieId(), name, description, language,
                 genre, durationMinutes, releaseDate, rating);
+                
         return movieRepository.save(movie);
     }
 
     public void removeMovie(long movieId) {
+
         Movie movie = getMovie(movieId);
         LocalDateTime now = LocalDateTime.now();
+        
         boolean hasActiveOrFutureShow = showRepository.findByMovieId(movieId).stream()
                 .anyMatch(s -> s.isActive() && !s.getStartDateTime().isBefore(now));
+        
         if (hasActiveOrFutureShow) {
             throw new ValidationException(
                     "Cannot remove movie '" + movie.getName() + "': it has active/future shows scheduled.");
@@ -64,9 +73,10 @@ public class MovieService {
         return movieRepository.findAll();
     }
 
-
     public List<Movie> browseAvailableMovies() {
+
         LocalDateTime now = LocalDateTime.now();
+
         List<Long> movieIdsWithFutureShows = showRepository.findAll().stream()
                 .filter(s -> s.isActive() && s.isUpcomingOrOngoing(now))
                 .map(Show::getMovieId)
@@ -80,8 +90,10 @@ public class MovieService {
     }
 
     public List<Movie> searchMovies(String query, boolean onlyWithFutureShows) {
+
         String q = query == null ? "" : query.trim().toLowerCase();
         List<Movie> base = onlyWithFutureShows ? browseAvailableMovies() : movieRepository.findAll();
+        
         return base.stream()
                 .filter(m -> m.getName().toLowerCase().contains(q))
                 .toList();

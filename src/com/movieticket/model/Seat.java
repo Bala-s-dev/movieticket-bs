@@ -3,6 +3,7 @@ package com.movieticket.model;
 import com.movieticket.enums.SeatCategory;
 
 public class Seat {
+
     private final long seatId;
     private final long screenId;
     private final char row;
@@ -17,11 +18,25 @@ public class Seat {
         this.category = category;
     }
 
-    public long getSeatId() { return seatId; }
-    public long getScreenId() { return screenId; }
-    public char getRow() { return row; }
-    public int getSeatNumber() { return seatNumber; }
-    public SeatCategory getCategory() { return category; }
+    public long getSeatId() { 
+        return seatId; 
+    }
+
+    public long getScreenId() { 
+        return screenId; 
+    }
+
+    public char getRow() { 
+        return row; 
+    }
+
+    public int getSeatNumber() { 
+        return seatNumber; 
+    }
+    
+    public SeatCategory getCategory() { 
+        return category; 
+    }
 
     public String getLabel() {
         return "" + row + seatNumber;
