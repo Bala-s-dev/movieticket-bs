@@ -40,7 +40,7 @@ public class ScreenService {
     }
 
     public Screen addScreen(long theatreId, long adminId, String screenName, List<RowConfig> rowConfigs) {
-        Theatre theatre = theatreService.getOwnedTheatreOrThrow(theatreId, adminId);
+        Theatre theatre = theatreService.getOwnedTheatre(theatreId, adminId);
 
         if (screenName == null || screenName.trim().isEmpty()) {
             throw new ValidationException("Screen name cannot be empty.");
@@ -71,30 +71,30 @@ public class ScreenService {
     }
 
     public List<Screen> viewScreens(long theatreId, long adminId) {
-        theatreService.getOwnedTheatreOrThrow(theatreId, adminId);
+        theatreService.getOwnedTheatre(theatreId, adminId);
         return screenRepository.findByTheatreId(theatreId);
     }
 
-    public Screen getScreenOrThrow(long screenId) {
+    public Screen getScreen(long screenId) {
         return screenRepository.findById(screenId)
                 .orElseThrow(() -> new ResourceNotFoundException("Screen not found with ID: " + screenId));
     }
 
-    public Screen getScreenOrThrow(long screenId, long adminId) {
+    public Screen getScreen(long screenId, long adminId) {
         Screen screen = screenRepository.findById(screenId)
                 .orElseThrow(() -> new ResourceNotFoundException("Screen not found with ID: " + screenId));
-        theatreService.getOwnedTheatreOrThrow(screen.getTheatreId(), adminId);
+        theatreService.getOwnedTheatre(screen.getTheatreId(), adminId);
         return screen;
     }
 
-    public Screen getOwnedScreenOrThrow(long screenId, long adminId) {
-        Screen screen = getScreenOrThrow(screenId, adminId);
-        theatreService.getOwnedTheatreOrThrow(screen.getTheatreId(), adminId);
+    public Screen getOwnedScreen(long screenId, long adminId) {
+        Screen screen = getScreen(screenId, adminId);
+        theatreService.getOwnedTheatre(screen.getTheatreId(), adminId);
         return screen;
     }
 
     public void removeScreen(long screenId, long adminId) {
-        Screen screen = getOwnedScreenOrThrow(screenId, adminId);
+        Screen screen = getOwnedScreen(screenId, adminId);
         LocalDateTime now = LocalDateTime.now();
         boolean hasFutureShow = showRepository.findByScreenId(screenId).stream()
                 .anyMatch(s -> s.isActive() && !s.getStartDateTime().isBefore(now));

@@ -42,7 +42,7 @@ public class MovieService {
     }
 
     public void removeMovie(long movieId) {
-        Movie movie = getMovieOrThrow(movieId);
+        Movie movie = getMovie(movieId);
         LocalDateTime now = LocalDateTime.now();
         boolean hasActiveOrFutureShow = showRepository.findByMovieId(movieId).stream()
                 .anyMatch(s -> s.isActive() && !s.getStartDateTime().isBefore(now));
@@ -55,7 +55,7 @@ public class MovieService {
         movieRepository.save(movie);
     }
 
-    public Movie getMovieOrThrow(long movieId) {
+    public Movie getMovie(long movieId) {
         return movieRepository.findById(movieId)
                 .orElseThrow(() -> new ResourceNotFoundException("Movie not found with ID: " + movieId));
     }

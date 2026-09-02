@@ -33,6 +33,17 @@ public class InputUtil {
         }
     }
 
+    public String readNonEmptyStringWithValidation(String prompt, String regex, String errorMessage) {
+        while (true) {
+            System.out.print(prompt);
+            String value = scanner.nextLine().trim();
+            if (!value.isEmpty() && value.matches(regex)) {
+                return value;
+            }
+            System.out.println(errorMessage);
+        }
+    }
+
     public int readInt(String prompt) {
         while (true) {
             System.out.print(prompt);

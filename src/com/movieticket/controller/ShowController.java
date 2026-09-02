@@ -60,7 +60,7 @@ public class ShowController {
             LocalDateTime end;
             boolean deriveEnd = input.readYesNo("Derive end time from movie duration?");
             if (deriveEnd) {
-                Movie movie = movieService.getMovieOrThrow(movieId);
+                Movie movie = movieService.getMovie(movieId);
                 end = start.plusMinutes(movie.getDurationMinutes());
                 System.out.println("Derived end time: " + DateTimeUtil.formatDateTime(end));
             } else {

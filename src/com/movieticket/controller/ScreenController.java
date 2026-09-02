@@ -134,7 +134,7 @@ public class ScreenController {
     private void viewSeatLayout(Admin admin) {
         try {
             long screenId = input.readLong("Enter Screen ID: ");
-            Screen screen = screenService.getScreenOrThrow(screenId, admin.getAdminId());
+            Screen screen = screenService.getScreen(screenId, admin.getAdminId());
             printSeatLayout(screen);
         } catch (ApplicationException e) {
             ConsoleUtil.printError(e.getMessage());

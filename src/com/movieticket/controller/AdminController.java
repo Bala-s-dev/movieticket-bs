@@ -31,21 +31,31 @@ public class AdminController {
     }
 
     public void registerFlow() {
+
+        ConsoleUtil.printHeader("ADMIN REGISTRATION");
+
+        String name = input.readNonEmptyStringWithValidation("Name: ", "^[a-zA-Z\\s]+$", "Invalid name. Please enter a valid name.");
+
+        String email = input.readNonEmptyStringWithValidation("Email: ", "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", "Invalid email. Please enter a valid email.");
+        // validateUtil.validateEmail(email);
+
+        String phone = input.readNonEmptyStringWithValidation("Phone: ", "^\\d{10}$", "Invalid phone number. Please enter a 10-digit phone number.");
+        // validateUtil.validatePhone(phone);
+
+        String password = input.readNonEmptyStringWithValidation("Password: ", "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$", "Invalid password. Please enter a valid password.");
+        // validateUtil.validatePassword(password);
+
         try {
-            ConsoleUtil.printHeader("ADMIN REGISTRATION");
-            String name = input.readNonEmptyString("Name: ");
-            validateUtil.validateName(name);
-            String email = input.readNonEmptyString("Email: ");
-            validateUtil.validateEmail(email);
-            String phone = input.readNonEmptyString("Phone (10 digits): ");
-            validateUtil.validatePhone(phone);
-            String password = input.readNonEmptyString("Password: ");
-            validateUtil.validatePassword(password);
             Admin admin = authService.registerAdmin(name, email, phone, password);
             ConsoleUtil.printSuccess("Admin registered successfully with ID: " + admin.getAdminId());
+
+            loginAdmin(email, password);
+            
         } catch (ApplicationException e) {
             ConsoleUtil.printError(e.getMessage());
+            System.out.println("Please try again.");
         }
+        
     }
 
     public void loginFlow() {
@@ -54,6 +64,12 @@ public class AdminController {
         validateUtil.validateEmail(email);
         String password = input.readString("Password: ");
         validateUtil.validatePassword(password);
+
+        loginAdmin(email, password);
+        
+    }
+
+    public void loginAdmin(String email, String password){
         try {
             Admin admin = authService.loginAdmin(email, password);
             System.out.println("Welcome, " + admin.getName());

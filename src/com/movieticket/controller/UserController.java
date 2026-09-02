@@ -35,20 +35,28 @@ public class UserController {
     }
 
     public void registerFlow() {
+            
+        ConsoleUtil.printHeader("USER REGISTRATION");
+
+        String name = input.readNonEmptyStringWithValidation("Name: ", "^[a-zA-Z\\s]+$", "Invalid name. Please enter a valid name.");
+        // validateUtil.validateName(name);
+
+        String email = input.readNonEmptyStringWithValidation("Email: ", "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", "Invalid email. Please enter a valid email.");
+        // validateUtil.validateEmail(email);
+
+        String phone = input.readNonEmptyStringWithValidation("Phone: ", "^\\d{10}$", "Invalid phone number. Please enter a 10-digit phone number.");
+            // validateUtil.validatePhone(phone);
+            
+        String password = input.readNonEmptyStringWithValidation("Password: ", "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$", "Invalid password. Please enter a valid password.");
+        // validateUtil.validatePassword(password);
+
         try {
-            ConsoleUtil.printHeader("USER REGISTRATION");
-            String name = input.readNonEmptyString("Name: ");
-            validateUtil.validateName(name);
-            String email = input.readNonEmptyString("Email: ");
-            validateUtil.validateEmail(email);
-            String phone = input.readNonEmptyString("Phone (10 digits): ");
-            validateUtil.validatePhone(phone);
-            String password = input.readNonEmptyString("Password: ");
-            validateUtil.validatePassword(password);
             User user = authService.registerUser(name, email, phone, password);
             ConsoleUtil.printSuccess("User registered successfully with ID: " + user.getUserId());
+            loginUser(email, password);
         } catch (ApplicationException e) {
             ConsoleUtil.printError(e.getMessage());
+            System.out.println("Please try again.");
         }
     }
 
@@ -58,6 +66,10 @@ public class UserController {
         validateUtil.validateEmail(email);
         String password = input.readString("Password: ");
         validateUtil.validatePassword(password);
+        loginUser(email, password);
+    }
+
+    public void loginUser(String email, String password){
         try {
             User user = authService.loginUser(email, password);
             System.out.println("Welcome, " + user.getName());
@@ -111,7 +123,7 @@ public class UserController {
     private void viewShows() {
         long movieId = input.readLong("Enter Movie ID: ");
         try {
-            Movie movie = movieService.getMovieOrThrow(movieId);
+            Movie movie = movieService.getMovie(movieId);
             List<Show> shows = showService.viewUpcomingShowsForMovie(movieId);
             if (shows.isEmpty()) {
                 System.out.println("No upcoming shows for " + movie.getName() + ".");
@@ -120,8 +132,8 @@ public class UserController {
             System.out.println("Movie: " + movie.getName());
             int i = 1;
             for (Show s : shows) {
-                Screen screen = screenService.getScreenOrThrow(s.getScreenId());
-                Theatre theatre = theatreService.getTheatreOrThrow(screen.getTheatreId());
+                Screen screen = screenService.getScreen(s.getScreenId());
+                Theatre theatre = theatreService.getTheatre(screen.getTheatreId());
                 double minPrice = Math.min(s.getPricing().getPrice(SeatCategory.SILVER),
                         Math.min(s.getPricing().getPrice(SeatCategory.GOLD), s.getPricing().getPrice(SeatCategory.PLATINUM)));
                 System.out.println();
@@ -141,8 +153,8 @@ public class UserController {
     private void viewAvailableSeats() {
         try {
             long showId = input.readLong("Enter Show ID: ");
-            Show show = showService.getShowOrThrow(showId);
-            Screen screen = screenService.getScreenOrThrow(show.getScreenId());
+            Show show = showService.getShow(showId);
+            Screen screen = screenService.getScreen(show.getScreenId());
             List<ShowSeat> showSeats = bookingService.getShowSeatStates(showId);
             printSeatGrid(screen, showSeats, Collections.emptySet());
         } catch (ApplicationException e) {
@@ -153,8 +165,8 @@ public class UserController {
     private void bookMovie(User user) {
         try {
             long showId = input.readLong("Enter Show ID to book: ");
-            Show show = showService.getShowOrThrow(showId);
-            Screen screen = screenService.getScreenOrThrow(show.getScreenId());
+            Show show = showService.getShow(showId);
+            Screen screen = screenService.getScreen(show.getScreenId());
             List<ShowSeat> showSeats = bookingService.getShowSeatStates(showId);
             printSeatGrid(screen, showSeats, Collections.emptySet());
 
@@ -201,8 +213,8 @@ public class UserController {
     }
 
     private void printBookingConfirmation(Booking booking, Show show, Screen screen) {
-        Movie movie = movieService.getMovieOrThrow(show.getMovieId());
-        Theatre theatre = theatreService.getTheatreOrThrow(screen.getTheatreId());
+        Movie movie = movieService.getMovie(show.getMovieId());
+        Theatre theatre = theatreService.getTheatre(screen.getTheatreId());
         System.out.println();
         ConsoleUtil.printHeader("BOOKING CONFIRMED");
         System.out.println("Booking ID : B" + booking.getBookingId());
@@ -248,9 +260,9 @@ public class UserController {
         ConsoleUtil.printLine();
         for (Booking b : bookings) {
             try {
-                Show show = showService.getShowOrThrow(b.getShowId());
-                Movie movie = movieService.getMovieOrThrow(show.getMovieId());
-                Screen screen = screenService.getScreenOrThrow(show.getScreenId());
+                Show show = showService.getShow(b.getShowId());
+                Movie movie = movieService.getMovie(show.getMovieId());
+                Screen screen = screenService.getScreen(show.getScreenId());
                 String seatLabels = b.getSeatIds().stream()
                         .map(id -> screen.getAllSeats().stream()
                                 .filter(s -> s.getSeatId() == id)

@@ -30,13 +30,13 @@ public class ShowService {
 
     public Show addShow(long adminId, long theatreId, long screenId, long movieId,
             LocalDateTime start, LocalDateTime end, TicketPricing pricing) {
-        Screen screen = screenService.getOwnedScreenOrThrow(screenId, adminId);
+        Screen screen = screenService.getOwnedScreen(screenId, adminId);
 
         if (screen.getTheatreId() != theatreId) {
             throw new ValidationException("Selected screen does not belong to the selected theatre.");
         }
 
-        movieService.getMovieOrThrow(movieId);
+        movieService.getMovie(movieId);
 
         if (start == null || end == null) {
             throw new ValidationException("Show start and end time must be provided.");
@@ -65,13 +65,13 @@ public class ShowService {
     }
 
     public void removeShow(long showId, long adminId) {
-        Show show = getShowOrThrow(showId);
-        screenService.getOwnedScreenOrThrow(show.getScreenId(), adminId); // ownership check
+        Show show = getShow(showId);
+        screenService.getOwnedScreen(show.getScreenId(), adminId); // ownership check
         show.setActive(false);
         showRepository.save(show);
     }
 
-    public Show getShowOrThrow(long showId) {
+    public Show getShow(long showId) {
         return showRepository.findById(showId)
                 .orElseThrow(() -> new ResourceNotFoundException("Show not found with ID: " + showId));
     }
@@ -100,7 +100,7 @@ public class ShowService {
         return showRepository.findAll().stream()
                 .filter(s -> {
                     try {
-                        screenService.getOwnedScreenOrThrow(s.getScreenId(), adminId);
+                        screenService.getOwnedScreen(s.getScreenId(), adminId);
                         return true;
                     } catch (Exception e) {
                         return false;

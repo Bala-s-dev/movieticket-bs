@@ -37,7 +37,7 @@ public class BookingService {
     }
 
     public Booking bookSeats(long userId, long showId, List<String> seatLabels) {
-        Show show = showService.getShowOrThrow(showId);
+        Show show = showService.getShow(showId);
         if (!show.isActive() || show.getStartDateTime().isBefore(LocalDateTime.now())) {
             throw new BookingException("This show is no longer available for booking.");
         }
@@ -54,7 +54,7 @@ public class BookingService {
             }
         }
 
-        Screen screen = screenService.getScreenOrThrow(show.getScreenId());
+        Screen screen = screenService.getScreen(show.getScreenId());
 
         List<Seat> resolvedSeats = new ArrayList<>();
         for (String label : uniqueLabels) {

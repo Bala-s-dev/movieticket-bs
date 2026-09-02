@@ -41,13 +41,13 @@ public class TheatreService {
         return theatreRepository.findByAdminId(adminId);
     }
 
-    public Theatre getTheatreOrThrow(long theatreId) {
+    public Theatre getTheatre(long theatreId) {
         return theatreRepository.findById(theatreId)
                 .orElseThrow(() -> new ResourceNotFoundException("Theatre not found with ID: " + theatreId));
     }
 
-    public Theatre getOwnedTheatreOrThrow(long theatreId, long adminId) {
-        Theatre theatre = getTheatreOrThrow(theatreId);
+    public Theatre getOwnedTheatre(long theatreId, long adminId) {
+        Theatre theatre = getTheatre(theatreId);
         if (theatre.getAdminId() != adminId) {
             throw new UnauthorizedAccessException("You do not have permission to access this theatre.");
         }
@@ -55,7 +55,7 @@ public class TheatreService {
     }
 
     public void removeTheatre(long theatreId, long adminId) {
-        Theatre theatre = getOwnedTheatreOrThrow(theatreId, adminId);
+        Theatre theatre = getOwnedTheatre(theatreId, adminId);
         LocalDateTime now = LocalDateTime.now();
 
         List<Screen> screens = screenRepository.findByTheatreId(theatreId);

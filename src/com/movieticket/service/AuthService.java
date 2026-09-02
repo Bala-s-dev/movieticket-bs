@@ -19,36 +19,48 @@ public class AuthService {
     }
 
     public User registerUser(String name, String email, String phone, String password) {
+        
         if (userRepository.existsByEmail(email)) {
             throw new ValidationException("A user with this email is already registered.");
         }
+
         User user = new User(IdGenerator.nextUserId(), name, email, phone, password);
+        
         return userRepository.save(user);
     }
 
     public Admin registerAdmin(String name, String email, String phone, String password) {
+
         if (adminRepository.existsByEmail(email)) {
             throw new ValidationException("An admin with this email is already registered.");
         }
+
         Admin admin = new Admin(IdGenerator.nextAdminId(), name, email, phone, password);
+
         return adminRepository.save(admin);
     }
 
     public User loginUser(String email, String password) {
+
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new AuthenticationException("Invalid email or password."));
+
         if (!user.checkPassword(password)) {
             throw new AuthenticationException("Invalid password.");
         }
+
         return user;
     }
 
     public Admin loginAdmin(String email, String password) {
+
         Admin admin = adminRepository.findByEmail(email)
                 .orElseThrow(() -> new AuthenticationException("Invalid email or password."));
+
         if (!admin.checkPassword(password)) {
             throw new AuthenticationException("Invalid email or password.");
         }
+
         return admin;
     }
 
