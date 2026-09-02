@@ -5,6 +5,7 @@ import com.movieticket.model.Admin;
 import com.movieticket.service.AuthService;
 import com.movieticket.util.ConsoleUtil;
 import com.movieticket.util.InputUtil;
+import com.movieticket.util.validateUtil;
 
 public class AdminController {
 
@@ -33,9 +34,13 @@ public class AdminController {
         try {
             ConsoleUtil.printHeader("ADMIN REGISTRATION");
             String name = input.readNonEmptyString("Name: ");
+            validateUtil.validateName(name);
             String email = input.readNonEmptyString("Email: ");
+            validateUtil.validateEmail(email);
             String phone = input.readNonEmptyString("Phone (10 digits): ");
+            validateUtil.validatePhone(phone);
             String password = input.readNonEmptyString("Password: ");
+            validateUtil.validatePassword(password);
             Admin admin = authService.registerAdmin(name, email, phone, password);
             ConsoleUtil.printSuccess("Admin registered successfully with ID: " + admin.getAdminId());
         } catch (ApplicationException e) {
@@ -46,7 +51,9 @@ public class AdminController {
     public void loginFlow() {
         ConsoleUtil.printHeader("ADMIN LOGIN");
         String email = input.readString("Email: ");
+        validateUtil.validateEmail(email);
         String password = input.readString("Password: ");
+        validateUtil.validatePassword(password);
         try {
             Admin admin = authService.loginAdmin(email, password);
             System.out.println("Welcome, " + admin.getName());

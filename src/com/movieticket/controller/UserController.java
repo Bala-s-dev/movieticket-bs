@@ -7,6 +7,7 @@ import com.movieticket.service.*;
 import com.movieticket.util.ConsoleUtil;
 import com.movieticket.util.DateTimeUtil;
 import com.movieticket.util.InputUtil;
+import com.movieticket.util.validateUtil;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -37,9 +38,13 @@ public class UserController {
         try {
             ConsoleUtil.printHeader("USER REGISTRATION");
             String name = input.readNonEmptyString("Name: ");
+            validateUtil.validateName(name);
             String email = input.readNonEmptyString("Email: ");
+            validateUtil.validateEmail(email);
             String phone = input.readNonEmptyString("Phone (10 digits): ");
+            validateUtil.validatePhone(phone);
             String password = input.readNonEmptyString("Password: ");
+            validateUtil.validatePassword(password);
             User user = authService.registerUser(name, email, phone, password);
             ConsoleUtil.printSuccess("User registered successfully with ID: " + user.getUserId());
         } catch (ApplicationException e) {
@@ -50,7 +55,9 @@ public class UserController {
     public void loginFlow() {
         ConsoleUtil.printHeader("USER LOGIN");
         String email = input.readString("Email: ");
+        validateUtil.validateEmail(email);
         String password = input.readString("Password: ");
+        validateUtil.validatePassword(password);
         try {
             User user = authService.loginUser(email, password);
             System.out.println("Welcome, " + user.getName());

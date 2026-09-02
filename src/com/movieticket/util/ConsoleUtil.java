@@ -5,15 +5,13 @@ public final class ConsoleUtil {
     private ConsoleUtil() { }
 
     public static void printHeader(String title) {
-        String line = "=========================================";
-        System.out.println(line);
-        int padding = (line.length() - title.length()) / 2;
-        System.out.println(" ".repeat(Math.max(0, padding)) + title);
-        System.out.println(line);
+        System.out.println();
+        System.out.println(title);
+        System.out.println();
     }
 
     public static void printLine() {
-        System.out.println("=========================================");
+        System.out.println();
     }
 
     public static void printError(String message) {

@@ -19,7 +19,6 @@ public class AuthService {
     }
 
     public User registerUser(String name, String email, String phone, String password) {
-        validateRegistration(name, email, phone, password);
         if (userRepository.existsByEmail(email)) {
             throw new ValidationException("A user with this email is already registered.");
         }
@@ -28,7 +27,6 @@ public class AuthService {
     }
 
     public Admin registerAdmin(String name, String email, String phone, String password) {
-        validateRegistration(name, email, phone, password);
         if (adminRepository.existsByEmail(email)) {
             throw new ValidationException("An admin with this email is already registered.");
         }
@@ -54,18 +52,4 @@ public class AuthService {
         return admin;
     }
 
-    private void validateRegistration(String name, String email, String phone, String password) {
-        if (name == null || name.trim().isEmpty()) {
-            throw new ValidationException("Name cannot be empty.");
-        }
-        if (email == null || !email.matches("^[\\w.+-]+@[\\w-]+\\.[a-zA-Z]{2,}$")) {
-            throw new ValidationException("Invalid email format.");
-        }
-        if (phone == null || !phone.matches("^\\d{10}$")) {
-            throw new ValidationException("Phone number must be exactly 10 digits.");
-        }
-        if (password == null || password.trim().isEmpty()) {
-            throw new ValidationException("Password cannot be empty.");
-        }
-    }
 }
