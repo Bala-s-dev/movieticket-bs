@@ -34,6 +34,7 @@ public class ReportService {
     public ReportService(BookingRepository bookingRepository, ShowRepository showRepository,
             ScreenRepository screenRepository, TheatreRepository theatreRepository,
             MovieRepository movieRepository) {
+
         this.bookingRepository = bookingRepository;
         this.showRepository = showRepository;
         this.screenRepository = screenRepository;

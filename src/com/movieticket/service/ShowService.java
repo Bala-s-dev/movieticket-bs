@@ -22,6 +22,7 @@ public class ShowService {
 
     public ShowService(ShowRepository showRepository, ShowSeatRepository showSeatRepository,
             ScreenService screenService, MovieService movieService) {
+
         this.showRepository = showRepository;
         this.showSeatRepository = showSeatRepository;
         this.screenService = screenService;
@@ -30,6 +31,7 @@ public class ShowService {
 
     public Show addShow(long adminId, long theatreId, long screenId, long movieId,
             LocalDateTime start, LocalDateTime end, TicketPricing pricing) {
+
         Screen screen = screenService.getOwnedScreen(screenId, adminId);
 
         if (screen.getTheatreId() != theatreId) {
@@ -53,6 +55,7 @@ public class ShowService {
         boolean overlaps = showRepository.findByScreenId(screenId).stream()
                 .filter(Show::isActive)
                 .anyMatch(existing -> existing.overlapsWith(start, end));
+
         if (overlaps) {
             throw new ValidationException("This screen already has an overlapping show in that time range.");
         }
@@ -74,8 +77,7 @@ public class ShowService {
     }
 
     public Show getShow(long showId) {
-        return showRepository.findById(showId)
-                .orElseThrow(() -> new ResourceNotFoundException("Show not found with ID: " + showId));
+        return showRepository.findById(showId).orElseThrow(() -> new ResourceNotFoundException("Show not found with ID: " + showId));
     }
 
     public List<Show> viewAllShows() {
@@ -84,6 +86,7 @@ public class ShowService {
 
     public List<Show> viewUpcomingShows() {
         LocalDateTime now = LocalDateTime.now();
+
         return showRepository.findAll().stream()
                 .filter(Show::isActive)
                 .filter(s -> s.isUpcomingOrOngoing(now))
@@ -92,6 +95,7 @@ public class ShowService {
 
     public List<Show> viewUpcomingShowsForMovie(long movieId) {
         LocalDateTime now = LocalDateTime.now();
+        
         return showRepository.findByMovieId(movieId).stream()
                 .filter(Show::isActive)
                 .filter(s -> s.isUpcomingOrOngoing(now))

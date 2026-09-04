@@ -8,7 +8,7 @@ import java.util.List;
 
 public class Booking {
     
-    private final long bookingId;
+    private final long id;
     private final long userId;
     private final long showId;
     private final LocalDateTime bookingDateTime;
@@ -18,7 +18,7 @@ public class Booking {
 
     public Booking(long bookingId, long userId, long showId, LocalDateTime bookingDateTime,
                    List<Long> seatIds, double totalAmount) {
-        this.bookingId = bookingId;
+        this.id = bookingId;
         this.userId = userId;
         this.showId = showId;
         this.bookingDateTime = bookingDateTime;
@@ -28,7 +28,7 @@ public class Booking {
     }
 
     public long getBookingId() { 
-        return bookingId; 
+        return id; 
     }
     
     public long getUserId() { 
@@ -61,7 +61,7 @@ public class Booking {
 
     @Override
     public String toString() {
-        return "Booking{id=" + bookingId + ", userId=" + userId + ", showId=" + showId +
+        return "Booking{id=" + id + ", userId=" + userId + ", showId=" + showId +
                 ", status=" + status + ", total=" + totalAmount + "}";
     }
 }

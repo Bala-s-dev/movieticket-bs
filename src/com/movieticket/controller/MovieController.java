@@ -44,8 +44,8 @@ public class MovieController {
         try {
             String name = input.readNonEmptyString("Movie name: ");
             String description = input.readString("Description: ");
-            String language = input.readNonEmptyString("Language: ");
-            String genre = input.readNonEmptyString("Genre: ");
+            String language = input.readNonEmptyStringWithValidation("Language: ","^[A-Za-z]+$","Invalid language. Please enter only alphabets.");
+            String genre = input.readNonEmptyStringWithValidation("Genre: ","^[A-Za-z]+$","Invalid genre. Please enter only alphabets.");
             int duration = input.readInt("Duration (minutes): ");
             LocalDate releaseDate = input.readDate("Release date");
             double rating = input.readDouble("Rating (0-10): ");
@@ -83,15 +83,18 @@ public class MovieController {
             System.out.println("No movies found.");
             return;
         }
+
         ConsoleUtil.printLine();
         System.out.printf("%-6s | %-25s | %-10s | %-12s | %-6s | %-8s%n",
                 "ID", "Name", "Language", "Genre", "Rating", "Status");
         ConsoleUtil.printLine();
+
         for (Movie m : movies) {
             System.out.printf("%-6d | %-25s | %-10s | %-12s | %-6.1f | %-8s%n",
                     m.getMovieId(), m.getName(), m.getLanguage(), m.getGenre(), m.getRating(),
                     m.isActive() ? "ACTIVE" : "REMOVED");
         }
+        
         ConsoleUtil.printLine();
     }
 }

@@ -20,20 +20,25 @@ public class TheatreService {
     private final ShowRepository showRepository;
 
     public TheatreService(TheatreRepository theatreRepository, ScreenRepository screenRepository,
-                          ShowRepository showRepository) {
+            ShowRepository showRepository) {
+
         this.theatreRepository = theatreRepository;
         this.screenRepository = screenRepository;
         this.showRepository = showRepository;
     }
 
     public Theatre addTheatre(long adminId, String name, String location) {
+
         if (name == null || name.trim().isEmpty()) {
             throw new ValidationException("Theatre name cannot be empty.");
         }
+
         if (location == null || location.trim().isEmpty()) {
             throw new ValidationException("Theatre location cannot be empty.");
         }
+
         Theatre theatre = new Theatre(IdGenerator.nextTheatreId(), name, location, adminId);
+
         return theatreRepository.save(theatre);
     }
 
@@ -42,30 +47,42 @@ public class TheatreService {
     }
 
     public Theatre getTheatre(long theatreId) {
-        return theatreRepository.findById(theatreId)
-                .orElseThrow(() -> new ResourceNotFoundException("Theatre not found with ID: " + theatreId));
+        return theatreRepository
+                .findById(theatreId)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Theatre not found with ID: " + theatreId));
     }
 
     public Theatre getOwnedTheatre(long theatreId, long adminId) {
+
         Theatre theatre = getTheatre(theatreId);
+
         if (theatre.getAdminId() != adminId) {
             throw new UnauthorizedAccessException("You do not have permission to access this theatre.");
         }
+
         return theatre;
     }
 
     public void removeTheatre(long theatreId, long adminId) {
+
         Theatre theatre = getOwnedTheatre(theatreId, adminId);
-        LocalDateTime now = LocalDateTime.now();
+
+        LocalDateTime currentDateTime = LocalDateTime.now();
 
         List<Screen> screens = screenRepository.findByTheatreId(theatreId);
+
         for (Screen screen : screens) {
-            boolean hasFutureShow = showRepository.findByScreenId(screen.getScreenId()).stream()
-                    .anyMatch(s -> s.isActive() && !s.getStartDateTime().isBefore(now));
+            boolean hasFutureShow = showRepository
+                    .findByScreenId(screen.getScreenId())
+                    .stream()
+                    .anyMatch(show -> show.isActive() && !show.getStartDateTime()
+                            .isBefore(currentDateTime));
+
             if (hasFutureShow) {
-                throw new ValidationException(
-                        "Cannot remove theatre '" + theatre.getName() +
-                                "': screen '" + screen.getScreenName() + "' has active/future shows.");
+                throw new ValidationException("Cannot remove theatre '" + theatre.getName()
+                        + "': screen '" + screen.getScreenName()
+                        + "' has active/future shows.");
             }
         }
 
@@ -73,6 +90,7 @@ public class TheatreService {
             screen.setActive(false);
             screenRepository.save(screen);
         }
+
         theatre.setActive(false);
         theatreRepository.save(theatre);
     }

@@ -2,14 +2,14 @@ package com.movieticket.model;
 
 public class Theatre {
 
-    private final long theatreId;
+    private final long id;
     private String name;
     private String location;
     private final long adminId;
     private boolean active;
 
     public Theatre(long theatreId, String name, String location, long adminId) {
-        this.theatreId = theatreId;
+        this.id = theatreId;
         this.name = name;
         this.location = location;
         this.adminId = adminId;
@@ -17,7 +17,7 @@ public class Theatre {
     }
 
     public long getTheatreId() { 
-        return theatreId; 
+        return id; 
     }
 
     public String getName() { 
@@ -50,6 +50,6 @@ public class Theatre {
 
     @Override
     public String toString() {
-        return "Theatre{id=" + theatreId + ", name=" + name + ", location=" + location + "}";
+        return "Theatre{id=" + id + ", name=" + name + ", location=" + location + "}";
     }
 }

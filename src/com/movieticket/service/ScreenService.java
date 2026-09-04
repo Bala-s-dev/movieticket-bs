@@ -17,6 +17,7 @@ import java.util.List;
 public class ScreenService {
 
     public static class RowConfig {
+
         public final char row;
         public final SeatCategory category;
         public final int seatCount;
@@ -32,14 +33,14 @@ public class ScreenService {
     private final TheatreService theatreService;
     private final ShowRepository showRepository;
 
-    public ScreenService(ScreenRepository screenRepository, TheatreService theatreService,
-                         ShowRepository showRepository) {
+    public ScreenService(ScreenRepository screenRepository, TheatreService theatreService, ShowRepository showRepository) {
         this.screenRepository = screenRepository;
         this.theatreService = theatreService;
         this.showRepository = showRepository;
     }
 
     public Screen addScreen(long theatreId, long adminId, String screenName, List<RowConfig> rowConfigs) {
+
         Theatre theatre = theatreService.getOwnedTheatre(theatreId, adminId);
 
         if (screenName == null || screenName.trim().isEmpty()) {
@@ -47,66 +48,93 @@ public class ScreenService {
         }
 
         boolean duplicateName = screenRepository.findByTheatreId(theatreId).stream()
-                .anyMatch(s -> s.isActive() && s.getScreenName().equalsIgnoreCase(screenName));
+            .anyMatch(screen -> screen.isActive() && screen.getScreenName().equalsIgnoreCase(screenName));
+
         if (duplicateName) {
-            throw new ValidationException("A screen with this name already exists in theatre '" + theatre.getName() + "'.");
+            throw new ValidationException("A screen with this name already exists in theatre '"
+                            + theatre.getName());
         }
-        
+
         if (rowConfigs == null || rowConfigs.isEmpty()) {
             throw new ValidationException("At least one row must be configured.");
         }
 
-        for (RowConfig rc : rowConfigs) {
-            if (rc.seatCount <= 0) {
+        for (RowConfig rowConfig : rowConfigs) {
+            if (rowConfig.seatCount <= 0) {
                 throw new ValidationException("Every row must have at least one seat.");
             }
         }
 
         Screen screen = new Screen(IdGenerator.nextScreenId(), screenName, theatreId);
 
-        for (RowConfig rc : rowConfigs) {
+        for (RowConfig rowConfig : rowConfigs) {
             List<Seat> seats = new ArrayList<>();
-            for (int i = 1; i <= rc.seatCount; i++) {
-                seats.add(new Seat(IdGenerator.nextSeatId(), screen.getScreenId(), rc.row, i, rc.category));
+
+            for (int seatNumber = 1; seatNumber <= rowConfig.seatCount; seatNumber++) {
+
+                seats.add(new Seat(IdGenerator.nextSeatId(), screen.getScreenId(), rowConfig.row,
+                        seatNumber, rowConfig.category));
             }
-            screen.addRow(rc.row, seats);
+
+            screen.addRow(rowConfig.row, seats);
         }
+
         return screenRepository.save(screen);
     }
 
     public List<Screen> viewScreens(long theatreId, long adminId) {
+
         theatreService.getOwnedTheatre(theatreId, adminId);
+
         return screenRepository.findByTheatreId(theatreId);
     }
 
     public Screen getScreen(long screenId) {
-        return screenRepository.findById(screenId)
-                .orElseThrow(() -> new ResourceNotFoundException("Screen not found with ID: " + screenId));
+        return screenRepository
+                .findById(screenId)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Screen not found with ID: " + screenId
+                        )
+                );
     }
 
     public Screen getScreen(long screenId, long adminId) {
-        Screen screen = screenRepository.findById(screenId)
-                .orElseThrow(() -> new ResourceNotFoundException("Screen not found with ID: " + screenId));
+
+        Screen screen = screenRepository.findById(screenId).orElseThrow(() ->
+                        new ResourceNotFoundException("Screen not found with ID: " + screenId));
+
         theatreService.getOwnedTheatre(screen.getTheatreId(), adminId);
+
         return screen;
     }
 
     public Screen getOwnedScreen(long screenId, long adminId) {
-        Screen screen = getScreen(screenId, adminId);
-        theatreService.getOwnedTheatre(screen.getTheatreId(), adminId);
-        return screen;
+        return getScreen(screenId, adminId);
     }
 
     public void removeScreen(long screenId, long adminId) {
+
         Screen screen = getOwnedScreen(screenId, adminId);
-        LocalDateTime now = LocalDateTime.now();
-        boolean hasFutureShow = showRepository.findByScreenId(screenId).stream()
-                .anyMatch(s -> s.isActive() && !s.getStartDateTime().isBefore(now));
+
+        LocalDateTime currentDateTime = LocalDateTime.now();
+
+        boolean hasFutureShow = showRepository
+                .findByScreenId(screenId)
+                .stream()
+                .anyMatch(show ->
+                        show.isActive()
+                                && !show.getStartDateTime()
+                                        .isBefore(currentDateTime)
+                );
+
         if (hasFutureShow) {
-            throw new ValidationException(
-                    "Cannot remove screen '" + screen.getScreenName() + "': it has active/future shows.");
+            throw new ValidationException("Cannot remove screen '" + screen.getScreenName()
+                    + "': it has active/future shows.");
         }
+
         screen.setActive(false);
         screenRepository.save(screen);
     }
 }
+

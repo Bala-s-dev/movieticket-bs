@@ -4,7 +4,7 @@ import java.time.LocalDate;
 
 public class Movie {
     
-    private final long movieId;
+    private final long id;
     private String name;
     private String description;
     private String language;
@@ -16,7 +16,7 @@ public class Movie {
 
     public Movie(long movieId, String name, String description, String language,
                  String genre, int durationMinutes, LocalDate releaseDate, double rating) {
-        this.movieId = movieId;
+        this.id = movieId;
         this.name = name;
         this.description = description;
         this.language = language;
@@ -28,7 +28,7 @@ public class Movie {
     }
 
     public long getMovieId() { 
-        return movieId; 
+        return id; 
     }
 
     public String getName() { 
@@ -97,7 +97,7 @@ public class Movie {
 
     @Override
     public String toString() {
-        return "Movie{id=" + movieId + ", name=" + name + ", lang=" + language +
+        return "Movie{id=" + id + ", name=" + name + ", lang=" + language +
                 ", genre=" + genre + ", rating=" + rating + "}";
     }
 }

@@ -4,14 +4,14 @@ import java.util.Objects;
 
 public class User {
 
-    private final long userId;
+    private final long id;
     private String name;
     private String email;
     private String phone;
     private String password; 
 
     public User(long userId, String name, String email, String phone, String password) {
-        this.userId = userId;
+        this.id = userId;
         this.name = name;
         this.email = email;
         this.phone = phone;
@@ -19,7 +19,7 @@ public class User {
     }
 
     public long getUserId() { 
-        return userId; 
+        return id; 
     }
 
     public String getName() { 
@@ -56,6 +56,6 @@ public class User {
 
     @Override
     public String toString() {
-        return "User{id=" + userId + ", name=" + name + ", email=" + email + "}";
+        return "User{id=" + id + ", name=" + name + ", email=" + email + "}";
     }
 }

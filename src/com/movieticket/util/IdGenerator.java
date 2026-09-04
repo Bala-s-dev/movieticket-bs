@@ -15,12 +15,35 @@ public final class IdGenerator {
 
     private IdGenerator() { }
 
-    public static long nextUserId() { return userId.incrementAndGet(); }
-    public static long nextAdminId() { return adminId.incrementAndGet(); }
-    public static long nextMovieId() { return movieId.incrementAndGet(); }
-    public static long nextTheatreId() { return theatreId.incrementAndGet(); }
-    public static long nextScreenId() { return screenId.incrementAndGet(); }
-    public static long nextSeatId() { return seatId.incrementAndGet(); }
-    public static long nextShowId() { return showId.incrementAndGet(); }
-    public static long nextBookingId() { return bookingId.incrementAndGet(); }
+    public static long nextUserId() {
+        return userId.incrementAndGet(); 
+    }
+
+    public static long nextAdminId() { 
+        return adminId.incrementAndGet(); 
+    }
+
+    public static long nextMovieId() { 
+        return movieId.incrementAndGet(); 
+    }
+
+    public static long nextTheatreId() { 
+        return theatreId.incrementAndGet(); 
+    }
+
+    public static long nextScreenId() { 
+        return screenId.incrementAndGet(); 
+    }
+
+    public static long nextSeatId() { 
+        return seatId.incrementAndGet(); 
+    }
+
+    public static long nextShowId() { 
+        return showId.incrementAndGet(); 
+    }
+
+    public static long nextBookingId() { 
+        return bookingId.incrementAndGet(); 
+    }
 }

@@ -7,26 +7,42 @@ import java.util.List;
 import java.util.Map;
 
 public class Screen {
-    private final long screenId;
+    private final long id;
     private String screenName;
     private final long theatreId;
     private final Map<Character, List<Seat>> seatLayout = new LinkedHashMap<>();
     private boolean active;
 
     public Screen(long screenId, String screenName, long theatreId) {
-        this.screenId = screenId;
+        this.id = screenId;
         this.screenName = screenName;
         this.theatreId = theatreId;
         this.active = true;
     }
 
-    public long getScreenId() { return screenId; }
-    public String getScreenName() { return screenName; }
-    public long getTheatreId() { return theatreId; }
-    public boolean isActive() { return active; }
+    public long getScreenId() { 
+        return id; 
+    }
 
-    public void setScreenName(String screenName) { this.screenName = screenName; }
-    public void setActive(boolean active) { this.active = active; }
+    public String getScreenName() { 
+        return screenName; 
+    }
+    
+    public long getTheatreId() { 
+        return theatreId; 
+    }
+    
+    public boolean isActive() { 
+        return active; 
+    }
+
+    public void setScreenName(String screenName) { 
+        this.screenName = screenName; 
+    }
+    
+    public void setActive(boolean active) { 
+        this.active = active; 
+    }
 
     public void addRow(char row, List<Seat> seats) {
         seatLayout.put(row, new ArrayList<>(seats));
@@ -37,10 +53,13 @@ public class Screen {
     }
 
     public List<Seat> getAllSeats() {
+
         List<Seat> allSeats = new ArrayList<>();
+
         for (List<Seat> rowSeats : seatLayout.values()) {
             allSeats.addAll(rowSeats);
         }
+
         return allSeats;
     }
 
@@ -50,6 +69,6 @@ public class Screen {
 
     @Override
     public String toString() {
-        return "Screen{id=" + screenId + ", name=" + screenName + ", rows=" + seatLayout.size() + "}";
+        return "Screen{id=" + id + ", name=" + screenName + ", rows=" + seatLayout.size() + "}";
     }
 }

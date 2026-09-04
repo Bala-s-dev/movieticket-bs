@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 
 public class Show {
     
-    private final long showId;
+    private final long id;
     private final long movieId;
     private final long screenId;
     private LocalDateTime startDateTime;
@@ -14,7 +14,7 @@ public class Show {
 
     public Show(long showId, long movieId, long screenId, LocalDateTime startDateTime,
                 LocalDateTime endDateTime, TicketPricing pricing) {
-        this.showId = showId;
+        this.id = showId;
         this.movieId = movieId;
         this.screenId = screenId;
         this.startDateTime = startDateTime;
@@ -24,7 +24,7 @@ public class Show {
     }
 
     public long getShowId() { 
-        return showId; 
+        return id; 
     }
     
     public long getMovieId() { 
@@ -65,7 +65,7 @@ public class Show {
 
     @Override
     public String toString() {
-        return "Show{id=" + showId + ", movieId=" + movieId + ", screenId=" + screenId +
+        return "Show{id=" + id + ", movieId=" + movieId + ", screenId=" + screenId +
                 ", start=" + startDateTime + "}";
     }
 }

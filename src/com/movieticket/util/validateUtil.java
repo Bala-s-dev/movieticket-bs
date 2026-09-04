@@ -2,8 +2,8 @@ package com.movieticket.util;
 
 import com.movieticket.exception.ValidationException;
 
-
 public class validateUtil {
+    
     public static void validateName(String name) {
         if (name == null || name.trim().isEmpty() || !name.matches("^[a-zA-Z\\s]+$")) {
             throw new ValidationException("Name cannot be empty and must contain only letters and spaces.");

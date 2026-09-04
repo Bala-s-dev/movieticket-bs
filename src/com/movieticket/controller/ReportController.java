@@ -45,6 +45,7 @@ public class ReportController {
         System.out.println("Total Tickets    : " + report.getTotalTicketsSold());
 
         List<ReportService.RevenueLine> byMovie = report.getByMovieSorted();
+        
         System.out.println();
         System.out.println("Breakdown by Movie:");
         if (byMovie.isEmpty()) {

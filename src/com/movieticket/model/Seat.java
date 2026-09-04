@@ -4,14 +4,14 @@ import com.movieticket.enums.SeatCategory;
 
 public class Seat {
 
-    private final long seatId;
+    private final long id;
     private final long screenId;
     private final char row;
     private final int seatNumber;
     private final SeatCategory category;
 
     public Seat(long seatId, long screenId, char row, int seatNumber, SeatCategory category) {
-        this.seatId = seatId;
+        this.id = seatId;
         this.screenId = screenId;
         this.row = row;
         this.seatNumber = seatNumber;
@@ -19,7 +19,7 @@ public class Seat {
     }
 
     public long getSeatId() { 
-        return seatId; 
+        return id; 
     }
 
     public long getScreenId() { 

@@ -4,14 +4,14 @@ import java.util.Objects;
 
 public class Admin {
     
-    private final long adminId;
+    private final long id;
     private String name;
     private String email;
     private String phone;
     private String password;
 
     public Admin(long adminId, String name, String email, String phone, String password) {
-        this.adminId = adminId;
+        this.id = adminId;
         this.name = name;
         this.email = email;
         this.phone = phone;
@@ -19,7 +19,7 @@ public class Admin {
     }
 
     public long getAdminId(){ 
-        return adminId; 
+        return id; 
     }
 
     public String getName() { 
@@ -56,6 +56,6 @@ public class Admin {
 
     @Override
     public String toString() {
-        return "Admin{id=" + adminId + ", name=" + name + ", email=" + email + "}";
+        return "Admin{id=" + id + ", name=" + name + ", email=" + email + "}";
     }
 }

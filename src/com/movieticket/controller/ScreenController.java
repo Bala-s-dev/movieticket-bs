@@ -12,7 +12,6 @@ import com.movieticket.util.InputUtil;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Scanner;
 
 public class ScreenController {
 
@@ -26,6 +25,7 @@ public class ScreenController {
 
     public void showScreenMenu(Admin admin) {
         boolean back = false;
+        
         while (!back) {
             ConsoleUtil.printHeader("SCREEN SECTION");
             System.out.println("1. Add Screen");
@@ -34,12 +34,14 @@ public class ScreenController {
             System.out.println("4. View Seat Layout");
             System.out.println("5. Back");
             int choice = input.readInt("Enter your choice: ");
+
             switch (choice) {
                 case 1 -> addScreen(admin);
                 case 2 -> removeScreen(admin);
                 case 3 -> viewScreens(admin);
                 case 4 -> viewSeatLayout(admin);
                 case 5 -> back = true;
+
                 default -> System.out.println("Invalid choice. Please try again.");
             }
         }
@@ -50,18 +52,20 @@ public class ScreenController {
             long theatreId = input.readLong("Enter Theatre ID: ");
             String screenName = input.readNonEmptyString("Screen name: ");
             int rowCount = input.readInt("How many rows to configure? ");
+
             if (rowCount <= 0) {
                 ConsoleUtil.printError("At least one row must be configured.");
                 return;
             }
+
             List<ScreenService.RowConfig> rowConfigs = new ArrayList<>();
-            Scanner sc = new Scanner(System.in);
+
             for (int i = 0; i < rowCount; i++) {
                 System.out.println("--- Row " + (i + 1) + " ---");
-                System.out.print("Row letter (A-Z) [ P 1 to use default: " + (char) ('A' + i) + "]: ");
-                String rowLetterStr = sc.next().trim();
+                String rowLetterStr = input.readNonEmptyString("Press 1 to use default row letter '" + ((char) ('A' + i))
+                        + "' or Enter your own row letter: ");
 
-                if(Integer.parseInt(rowLetterStr) == 1) {
+                if (Integer.parseInt(rowLetterStr) == 1) {
                     rowLetterStr = String.valueOf((char) ('A' + i));
                     System.out.println("Using default row letter: " + rowLetterStr);
                 }
@@ -70,6 +74,7 @@ public class ScreenController {
                 if (rowLetterStr.length() != 1 || !Character.isLetter(rowLetterStr.charAt(0))) {
                     ConsoleUtil.printError("Invalid row letter. Please enter a single letter (A-Z).");
                     i--; 
+
                     continue;
                 }
 
@@ -78,7 +83,7 @@ public class ScreenController {
                 int seatCount = input.readInt("Number of seats in row " + rowLetter + ": ");
                 rowConfigs.add(new ScreenService.RowConfig(rowLetter, category, seatCount));
             }
-            sc.close();
+
             Screen screen = screenService.addScreen(theatreId, admin.getAdminId(), screenName, rowConfigs);
             ConsoleUtil.printSuccess("Screen added successfully with ID: " + screen.getScreenId() +
                     " (" + screen.getTotalSeatCount() + " seats)");
@@ -91,10 +96,12 @@ public class ScreenController {
         while (true) {
             System.out.println("Category: 1. GOLD  2. PLATINUM  3. SILVER");
             int choice = input.readInt("Enter choice: ");
+
             switch (choice) {
                 case 1: return SeatCategory.GOLD;
                 case 2: return SeatCategory.PLATINUM;
                 case 3: return SeatCategory.SILVER;
+
                 default: System.out.println("Invalid choice.");
             }
         }
@@ -114,17 +121,21 @@ public class ScreenController {
         try {
             long theatreId = input.readLong("Enter Theatre ID: ");
             List<Screen> screens = screenService.viewScreens(theatreId, admin.getAdminId());
+           
             if (screens.isEmpty()) {
                 System.out.println("No screens found for this theatre.");
                 return;
             }
+           
             ConsoleUtil.printLine();
             System.out.printf("%-10s | %-20s | %-10s | %-8s%n", "ID", "Name", "Seats", "Status");
             ConsoleUtil.printLine();
+           
             for (Screen s : screens) {
                 System.out.printf("%-10d | %-20s | %-10d | %-8s%n",
                         s.getScreenId(), s.getScreenName(), s.getTotalSeatCount(), s.isActive() ? "ACTIVE" : "REMOVED");
-            }
+           
+                    }
             ConsoleUtil.printLine();
         } catch (ApplicationException e) {
             ConsoleUtil.printError(e.getMessage());
@@ -144,15 +155,18 @@ public class ScreenController {
     static void printSeatLayout(Screen screen) {
         System.out.println("                 SCREEN");
         System.out.println("        -------------------------");
+
         for (Map.Entry<Character, List<Seat>> entry : screen.getSeatLayout().entrySet()) {
             List<Seat> seats = entry.getValue();
             SeatCategory category = seats.isEmpty() ? null : seats.get(0).getCategory();
             System.out.println();
             System.out.println(category);
             StringBuilder sb = new StringBuilder();
+
             for (Seat seat : seats) {
                 sb.append(seat.getLabel()).append(" ");
             }
+            
             System.out.println(sb.toString().trim());
         }
     }

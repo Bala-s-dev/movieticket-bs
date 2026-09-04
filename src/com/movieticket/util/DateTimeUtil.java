@@ -8,17 +8,10 @@ import java.time.format.DateTimeParseException;
 
 public final class DateTimeUtil {
 
-    public static final DateTimeFormatter DATE_FORMAT =
-            DateTimeFormatter.ofPattern("dd-MM-yyyy");
-
-    public static final DateTimeFormatter TIME_FORMAT =
-            DateTimeFormatter.ofPattern("HH:mm");
-
-    public static final DateTimeFormatter DISPLAY_DATE =
-            DateTimeFormatter.ofPattern("dd-MMM-yyyy");
-
-    public static final DateTimeFormatter DISPLAY_TIME =
-            DateTimeFormatter.ofPattern("hh:mm a");
+    public static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+    public static final DateTimeFormatter TIME_FORMAT = DateTimeFormatter.ofPattern("HH:mm");
+    public static final DateTimeFormatter DISPLAY_DATE = DateTimeFormatter.ofPattern("dd-MMM-yyyy");
+    public static final DateTimeFormatter DISPLAY_TIME = DateTimeFormatter.ofPattern("hh:mm a");
 
     private DateTimeUtil() { }
 
@@ -35,35 +28,26 @@ public final class DateTimeUtil {
             return date;
 
         } catch (DateTimeParseException e) {
-            throw new IllegalArgumentException(
-                    "Invalid date format. Expected dd-MM-yyyy."
-            );
+            throw new IllegalArgumentException("Invalid date format. Expected dd-MM-yyyy.");
         }
     }
 
     public static LocalTime parseTime(String text) {
         try {
-            LocalTime time = LocalTime.parse(text.trim(), TIME_FORMAT);
-
-            return time;
-
+            return LocalTime.parse(text.trim(), TIME_FORMAT);
         } catch (DateTimeParseException e) {
-            throw new IllegalArgumentException(
-                    "Invalid time format. Expected HH:mm (24-hour)."
-            );
+            throw new IllegalArgumentException("Invalid time format. Expected HH:mm (24-hour).");
         }
     }
 
     public static void validateDateTime(LocalDate date, LocalTime time) {
-
         LocalDateTime selectedDateTime = LocalDateTime.of(date, time);
         LocalDateTime currentDateTime = LocalDateTime.now();
 
         if (!selectedDateTime.isAfter(currentDateTime)) {
-            throw new IllegalArgumentException(
-                    "Selected date and time must be in the future."
-            );
+            throw new IllegalArgumentException("Selected date and time must be in the future.");
         }
+        
     }
 
     public static String formatDate(LocalDate date) {
@@ -75,8 +59,7 @@ public final class DateTimeUtil {
     }
 
     public static String formatDateTime(LocalDateTime dateTime) {
-        return dateTime.toLocalDate().format(DISPLAY_DATE)
-                + " "
-                + dateTime.toLocalTime().format(DISPLAY_TIME);
+        return dateTime.toLocalDate().format(DISPLAY_DATE) 
+                + " " + dateTime.toLocalTime().format(DISPLAY_TIME);
     }
 }

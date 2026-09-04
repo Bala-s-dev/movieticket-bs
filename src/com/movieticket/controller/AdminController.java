@@ -69,6 +69,7 @@ public class AdminController {
     }
 
     public void loginAdmin(String email, String password){
+
         try {
             Admin admin = authService.loginAdmin(email, password);
             System.out.println("Welcome, " + admin.getName());
@@ -76,11 +77,15 @@ public class AdminController {
         } catch (ApplicationException e) {
             ConsoleUtil.printError(e.getMessage());
         }
+
     }
 
     private void showAdminMenu(Admin admin) {
+
         boolean logout = false;
+
         while (!logout) {
+
             ConsoleUtil.printHeader("ADMIN MENU");
             System.out.println("1. Movie Section");
             System.out.println("2. Theatre Section");
@@ -89,7 +94,9 @@ public class AdminController {
             System.out.println("5. Revenue Report");
             System.out.println("6. Logout");
             int choice = input.readInt("Enter your choice: ");
+
             switch (choice) {
+                
                 case 1 -> movieController.showMovieMenu();
                 case 2 -> theatreController.showTheatreMenu(admin);
                 case 3 -> screenController.showScreenMenu(admin);
@@ -101,6 +108,7 @@ public class AdminController {
                 }
                 default -> System.out.println("Invalid choice. Please try again.");
             }
+
         }
     }
 }
