@@ -7,6 +7,7 @@ import com.movieticket.model.User;
 import com.movieticket.repository.AdminRepository;
 import com.movieticket.repository.UserRepository;
 import com.movieticket.util.IdGenerator;
+import com.movieticket.util.PasswordUtil;
 
 public class AuthService {
 
@@ -23,8 +24,8 @@ public class AuthService {
         if (userRepository.existsByEmail(email)) {
             throw new ValidationException("A user with this email is already registered.");
         }
-
-        User user = new User(IdGenerator.nextUserId(), name, email, phone, password);
+        String hashedPassword = PasswordUtil.hashPassword(password);
+        User user = new User(IdGenerator.nextUserId(), name, email, phone, hashedPassword);
         
         return userRepository.save(user);
     }
@@ -34,8 +35,10 @@ public class AuthService {
         if (adminRepository.existsByEmail(email)) {
             throw new ValidationException("An admin with this email is already registered.");
         }
+        
+        String hashedPassword = PasswordUtil.hashPassword(password);
 
-        Admin admin = new Admin(IdGenerator.nextAdminId(), name, email, phone, password);
+        Admin admin = new Admin(IdGenerator.nextAdminId(), name, email, phone, hashedPassword);
 
         return adminRepository.save(admin);
     }
@@ -45,7 +48,9 @@ public class AuthService {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new AuthenticationException("Invalid email or password."));
 
-        if (!user.checkPassword(password)) {
+        String hashedPassword = PasswordUtil.hashPassword(password);
+
+        if (!user.checkPassword(hashedPassword)) {
             throw new AuthenticationException("Invalid password.");
         }
 
@@ -57,8 +62,10 @@ public class AuthService {
         Admin admin = adminRepository.findByEmail(email)
                 .orElseThrow(() -> new AuthenticationException("Invalid email or password."));
 
-        if (!admin.checkPassword(password)) {
-            throw new AuthenticationException("Invalid email or password.");
+        String hashedPassword = PasswordUtil.hashPassword(password);
+
+        if (!admin.checkPassword(hashedPassword)) {
+            throw new AuthenticationException("Invalid password.");
         }
 
         return admin;
