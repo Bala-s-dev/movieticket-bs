@@ -3,6 +3,7 @@ package com.movieticket;
 import com.movieticket.controller.*;
 import com.movieticket.repository.*;
 import com.movieticket.repository.local.*;
+import com.movieticket.repository.DAO.*;
 import com.movieticket.service.*;
 import com.movieticket.util.DatabaseManager;
 import com.movieticket.util.InputUtil;
@@ -15,8 +16,8 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         InputUtil input = new InputUtil(scanner);
 
-        UserRepository userRepository = new LocalUserRepository();
-        AdminRepository adminRepository = new LocalAdminRepository();
+        UserRepository userRepository = new DAOUserRepository();
+        AdminRepository adminRepository = new DAOAdminRepository();
         MovieRepository movieRepository = new LocalMovieRepository();
         TheatreRepository theatreRepository = new LocalTheatreRepository();
         ScreenRepository screenRepository = new LocalScreenRepository();
@@ -46,11 +47,8 @@ public class Main {
                 bookingService, theatreService, input);
 
         MainMenuController mainMenuController = new MainMenuController(userController, adminController, input);
-        
-        DatabaseManager dbManager = new DatabaseManager();
-        dbManager.getConnection();
+        DatabaseManager.getConnection();
         mainMenuController.run();
         scanner.close();
-        dbManager.closeConnection();
     }
 }

@@ -4,7 +4,7 @@ import java.util.Objects;
 
 public class User {
 
-    private final long id;
+    private long id;
     private String name;
     private String email;
     private String phone;
@@ -38,6 +38,10 @@ public class User {
         return password; 
     }
 
+    public void setUserId(long id) {
+        this.id = id;
+    }
+    
     public void setName(String name) { 
         this.name = name; 
     }

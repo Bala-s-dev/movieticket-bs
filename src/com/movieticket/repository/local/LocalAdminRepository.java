@@ -3,9 +3,7 @@ package com.movieticket.repository.local;
 import com.movieticket.model.Admin;
 import com.movieticket.repository.AdminRepository;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -31,10 +29,10 @@ public class LocalAdminRepository implements AdminRepository {
                 .findFirst();
     }
 
-    @Override
-    public List<Admin> findAll() {
-        return new ArrayList<>(admins.values());
-    }
+    // @Override
+    // public List<Admin> findAll() {
+    //     return new ArrayList<>(admins.values());
+    // }
 
     @Override
     public boolean existsByEmail(String email) {

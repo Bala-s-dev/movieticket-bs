@@ -4,7 +4,7 @@ import java.time.LocalDate;
 
 public class Movie {
     
-    private final long id;
+    private long id;
     private String name;
     private String description;
     private String language;
@@ -12,6 +12,10 @@ public class Movie {
     private int durationMinutes;
     private LocalDate releaseDate;
     private boolean active;
+
+    public Movie() {
+        this.id = 0;
+    }
 
     public Movie(long movieId, String name, String description, String language,
                  String genre, int durationMinutes, LocalDate releaseDate) {
@@ -43,6 +47,10 @@ public class Movie {
 
     public String getGenre() { 
         return genre; 
+    }
+
+    public void setMovieId(long id){
+        this.id = id;
     }
 
     public int getDurationMinutes() { 

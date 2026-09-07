@@ -4,7 +4,7 @@ import java.util.Objects;
 
 public class Admin {
     
-    private final long id;
+    private long id;
     private String name;
     private String email;
     private String phone;
@@ -20,6 +20,10 @@ public class Admin {
 
     public long getAdminId(){ 
         return id; 
+    }
+
+    public void setAdminId(long id) {
+        this.id = id;
     }
 
     public String getName() { 

@@ -1,23 +1,24 @@
 package com.movieticket.repository.DAO;
 
-import com.movieticket.model.Admin;
-import com.movieticket.repository.AdminRepository;
+import com.movieticket.model.User;
+import com.movieticket.repository.UserRepository;
 import com.movieticket.util.DatabaseManager;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Optional;
 import java.sql.Statement;
 
-public class DAOAdminRepository implements AdminRepository {
+public class DAOUserRepository implements UserRepository {
 
     @Override
-    public Admin save(Admin admin) {
-        String sql = "INSERT INTO admins (name, email, phone, password) " +
+    public User save(User user) {
+        String sql = "INSERT INTO users (username, email, phone, password) " +
                 "VALUES (?, ?, ?, ?) " +
                 "ON DUPLICATE KEY UPDATE " +
-                "admin_id = LAST_INSERT_ID(admin_id), " +
+                "user_id = LAST_INSERT_ID(user_id), " +
                 "name = VALUES(name), " +
                 "phone = VALUES(phone), " +
                 "password = VALUES(password)";
@@ -27,29 +28,29 @@ public class DAOAdminRepository implements AdminRepository {
                     sql,
                     Statement.RETURN_GENERATED_KEYS)) {
 
-            ps.setString(1, admin.getName());
-            ps.setString(2, admin.getEmail());
-            ps.setString(3, admin.getPhone());
-            ps.setString(4, admin.getPassword());
+            ps.setString(1, user.getName());
+            ps.setString(2, user.getEmail());
+            ps.setString(3, user.getPhone());
+            ps.setString(4, user.getPassword());
 
             ps.executeUpdate();
 
             try (ResultSet rs = ps.getGeneratedKeys()) {
                 if (rs.next()) {
-                    admin.setAdminId(rs.getInt(1));
+                    user.setUserId(rs.getInt(1));
                 }
             }
 
-            return admin;
+            return user;
 
         } catch (SQLException e) {
-            throw new RuntimeException("Failed to save admin: " + e.getMessage(), e);
+            throw new RuntimeException("Failed to save User: " + e.getMessage(), e);
         }
     }
 
     @Override
-    public Optional<Admin> findById(long id) {
-        String sql = "SELECT * FROM admins WHERE admin_id = ?";
+    public Optional<User> findById(long id) {
+        String sql = "SELECT * FROM users WHERE user_id = ?";
         try (Connection conn = DatabaseManager.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setLong(1, id);
@@ -65,8 +66,8 @@ public class DAOAdminRepository implements AdminRepository {
     }
 
     @Override
-    public Optional<Admin> findByEmail(String email) {
-        String sql = "SELECT * FROM admins WHERE email = ?";
+    public Optional<User> findByEmail(String email) {
+        String sql = "SELECT * FROM users WHERE email = ?";
         try (Connection conn = DatabaseManager.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, email);
@@ -77,7 +78,7 @@ public class DAOAdminRepository implements AdminRepository {
             }
             return Optional.empty();
         } catch (SQLException e) {
-            throw new RuntimeException("Failed to fetch admin by email: " + e.getMessage(), e);
+            throw new RuntimeException("Failed to fetch User by email: " + e.getMessage(), e);
         }
     }
 
@@ -102,8 +103,8 @@ public class DAOAdminRepository implements AdminRepository {
         return findByEmail(email).isPresent();
     }
 
-    private Admin mapRow(ResultSet rs) throws SQLException {
-        return new Admin(
+    private User mapRow(ResultSet rs) throws SQLException {
+        return new User(
                 rs.getLong("id"),
                 rs.getString("name"),
                 rs.getString("email"),
@@ -111,4 +112,10 @@ public class DAOAdminRepository implements AdminRepository {
                 rs.getString("password")
         );
     }
+
+	@Override
+	public List<User> findAll() {
+		// TODO
+		throw new UnsupportedOperationException("Unimplemented method 'findAll'");
+	}
 }
