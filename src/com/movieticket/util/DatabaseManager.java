@@ -3,9 +3,9 @@ package com.movieticket.util;
 import java.sql.Connection;
 import java.sql.DriverManager;
 
-public class DatabaseManager {
-    DbConfig config;
-    Connection connection;
+public final class DatabaseManager {
+    static DbConfig config;
+    static Connection connection;
 
     static{
         try{
@@ -24,10 +24,10 @@ public class DatabaseManager {
             e.printStackTrace();
         }
     }
-    public Connection getConnection(){
+    public static Connection getConnection(){
         return connection;
     }
-    public void closeConnection(){
+    public static void closeConnection(){
         try{
             connection.close();
         }catch(Exception e){
