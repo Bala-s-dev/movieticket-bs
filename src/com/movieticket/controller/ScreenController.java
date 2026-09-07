@@ -136,6 +136,7 @@ public class ScreenController {
                         s.getScreenId(), s.getScreenName(), s.getTotalSeatCount(), s.isActive() ? "ACTIVE" : "REMOVED");
            
                     }
+                    
             ConsoleUtil.printLine();
         } catch (ApplicationException e) {
             ConsoleUtil.printError(e.getMessage());

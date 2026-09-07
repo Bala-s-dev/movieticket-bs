@@ -40,8 +40,8 @@ public class TheatreController {
 
     private void addTheatre(Admin admin) {
         try {
-            String name = input.readNonEmptyString("Theatre name: ");
-            String location = input.readNonEmptyString("Location: ");
+            String name = input.readNonEmptyStringWithValidation("Theatre name: ","^[A-Za-z,]*$","Invalid name. Please enter a valid name.");
+            String location = input.readNonEmptyStringWithValidation("Location: ","^[A-Za-z,]*$","Invalid location. Please enter a valid location.");
             Theatre theatre = theatreService.addTheatre(admin.getAdminId(), name, location);
             ConsoleUtil.printSuccess("Theatre added successfully with ID: " + theatre.getTheatreId());
         } catch (ApplicationException e) {

@@ -23,7 +23,7 @@ public class MovieService {
     }
 
     public Movie addMovie(String name, String description, String language, String genre,
-                          int durationMinutes, LocalDate releaseDate, double rating) {
+                          int durationMinutes, LocalDate releaseDate) {
 
         if (name == null || name.trim().isEmpty()) {
             throw new ValidationException("Movie name cannot be empty.");
@@ -33,16 +33,12 @@ public class MovieService {
             throw new ValidationException("Movie duration must be positive.");
         }
 
-        if (rating < 0 || rating > 10) {
-            throw new ValidationException("Rating must be between 0 and 10.");
-        }
-
         if (releaseDate == null) {
             throw new ValidationException("Release date must be valid.");
         }
 
         Movie movie = new Movie(IdGenerator.nextMovieId(), name, description, language,
-                genre, durationMinutes, releaseDate, rating);
+                genre, durationMinutes, releaseDate);
                 
         return movieRepository.save(movie);
     }

@@ -11,11 +11,10 @@ public class Movie {
     private String genre;
     private int durationMinutes;
     private LocalDate releaseDate;
-    private double rating;
     private boolean active;
 
     public Movie(long movieId, String name, String description, String language,
-                 String genre, int durationMinutes, LocalDate releaseDate, double rating) {
+                 String genre, int durationMinutes, LocalDate releaseDate) {
         this.id = movieId;
         this.name = name;
         this.description = description;
@@ -23,7 +22,6 @@ public class Movie {
         this.genre = genre;
         this.durationMinutes = durationMinutes;
         this.releaseDate = releaseDate;
-        this.rating = rating;
         this.active = true;
     }
 
@@ -55,10 +53,6 @@ public class Movie {
         return releaseDate; 
     }
 
-    public double getRating() { 
-        return rating; 
-    }
-
     public boolean isActive() { 
         return active; 
     }
@@ -87,9 +81,6 @@ public class Movie {
         this.releaseDate = releaseDate; 
     }
 
-    public void setRating(double rating) { 
-        this.rating = rating; 
-    }
 
     public void setActive(boolean active) { 
         this.active = active; 
@@ -98,6 +89,6 @@ public class Movie {
     @Override
     public String toString() {
         return "Movie{id=" + id + ", name=" + name + ", lang=" + language +
-                ", genre=" + genre + ", rating=" + rating + "}";
+                ", genre=" + genre + "}";
     }
 }

@@ -48,9 +48,8 @@ public class MovieController {
             String genre = input.readNonEmptyStringWithValidation("Genre: ","^[A-Za-z]+$","Invalid genre. Please enter only alphabets.");
             int duration = input.readInt("Duration (minutes): ");
             LocalDate releaseDate = input.readDate("Release date");
-            double rating = input.readDouble("Rating (0-10): ");
 
-            Movie movie = movieService.addMovie(name, description, language, genre, duration, releaseDate, rating);
+            Movie movie = movieService.addMovie(name, description, language, genre, duration, releaseDate);
             ConsoleUtil.printSuccess("Movie added successfully with ID: " + movie.getMovieId());
         } catch (ApplicationException | IllegalArgumentException e) {
             ConsoleUtil.printError(e.getMessage());
@@ -90,8 +89,8 @@ public class MovieController {
         ConsoleUtil.printLine();
 
         for (Movie m : movies) {
-            System.out.printf("%-6d | %-25s | %-10s | %-12s | %-6.1f | %-8s%n",
-                    m.getMovieId(), m.getName(), m.getLanguage(), m.getGenre(), m.getRating(),
+            System.out.printf("%-6d | %-25s | %-10s | %-12s | %-8s%n",
+                    m.getMovieId(), m.getName(), m.getLanguage(), m.getGenre(),
                     m.isActive() ? "ACTIVE" : "REMOVED");
         }
         

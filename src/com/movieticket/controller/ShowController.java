@@ -59,9 +59,18 @@ public class ShowController {
             LocalDateTime start = input.readDateTime("Show start");
             LocalDateTime end;
             boolean deriveEnd = input.readYesNo("Derive end time from movie duration?");
+            int breakMinutes;
+
             if (deriveEnd) {
+                boolean breakTime = input.readYesNo("Want to include break time ");
+                if(breakTime){
+                    breakMinutes = input.readInt("Enter break time in minutes: ");
+                } else {
+                    breakMinutes = 0;
+                }
+
                 Movie movie = movieService.getMovie(movieId);
-                end = start.plusMinutes(movie.getDurationMinutes());
+                end = start.plusMinutes(movie.getDurationMinutes() + breakMinutes);
                 System.out.println("Derived end time: " + DateTimeUtil.formatDateTime(end));
             } else {
                 end = input.readDateTime("Show end");
@@ -70,6 +79,7 @@ public class ShowController {
             TicketPricing pricing;
             System.out.println("1. Use Default Pricing  2. Customize Pricing");
             int pricingChoice = input.readInt("Enter choice: ");
+
             if (pricingChoice == 2) {
                 double gold = input.readDouble("Enter Gold Price: ");
                 double platinum = input.readDouble("Enter Platinum Price: ");
@@ -79,6 +89,7 @@ public class ShowController {
                     return;
                 }
                 pricing = new TicketPricing(gold, platinum, silver);
+                
             } else {
                 double price = input.readDouble("Enter Price: ");
                 pricing = pricingConfigService.getDefaultPricing(price);

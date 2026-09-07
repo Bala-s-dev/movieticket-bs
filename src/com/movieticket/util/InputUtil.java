@@ -61,7 +61,13 @@ public class InputUtil {
             String input = scanner.nextLine().trim();
 
             try {
-                return Integer.parseInt(input);
+                int n = Integer.parseInt(input);
+                if(n <= 0){
+                    System.out.println("Invalid number. Please enter a valid integer.");
+                }
+                else{
+                    return n;
+                }
             } catch (NumberFormatException exception) {
                 System.out.println("Invalid number. Please enter a valid integer.");
             }
@@ -74,7 +80,13 @@ public class InputUtil {
             String input = scanner.nextLine().trim();
 
             try {
-                return Long.parseLong(input);
+                long n = Long.parseLong(input);
+                if(n <= 0){
+                    System.out.println("Invalid ID. Please enter a valid ID.");
+                }
+                else{
+                    return n;
+                }
             } catch (NumberFormatException exception) {
                 System.out.println("Invalid number. Please enter a valid ID.");
             }
@@ -87,7 +99,13 @@ public class InputUtil {
             String input = scanner.nextLine().trim();
 
             try {
-                return Double.parseDouble(input);
+                double n = Double.parseDouble(input);
+                if(n <= 0){
+                    System.out.println("Invalid price/amount. Please enter a valid price/amount.");
+                }
+                else{
+                    return n;
+                }
             } catch (NumberFormatException exception) {
                 System.out.println("Invalid number. Please enter a valid price/amount.");
             }
