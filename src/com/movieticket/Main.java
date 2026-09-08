@@ -5,7 +5,6 @@ import com.movieticket.repository.*;
 import com.movieticket.repository.local.*;
 import com.movieticket.repository.DAO.*;
 import com.movieticket.service.*;
-import com.movieticket.util.DatabaseManager;
 import com.movieticket.util.InputUtil;
 
 import java.util.Scanner;
@@ -47,7 +46,7 @@ public class Main {
                 bookingService, theatreService, input);
 
         MainMenuController mainMenuController = new MainMenuController(userController, adminController, input);
-        DatabaseManager.getConnection();
+
         mainMenuController.run();
         scanner.close();
     }

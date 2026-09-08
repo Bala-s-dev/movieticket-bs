@@ -33,11 +33,10 @@ public class ShowService {
             LocalDateTime start, LocalDateTime end, TicketPricing pricing) {
 
         Screen screen = screenService.getOwnedScreen(screenId, adminId);
-
         if (screen.getTheatreId() != theatreId) {
             throw new ValidationException("Selected screen does not belong to the selected theatre.");
         }
-
+        
         movieService.getMovie(movieId);
 
         if (start == null || end == null) {

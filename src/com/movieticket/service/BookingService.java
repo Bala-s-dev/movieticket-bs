@@ -37,7 +37,6 @@ public class BookingService {
     }
 
     public Booking bookSeats(long userId, long showId, List<String> seatLabels) {
-
         Show show = showService.getShow(showId);
 
         if (!show.isActive() || show.getStartDateTime().isBefore(LocalDateTime.now())) {
@@ -51,29 +50,25 @@ public class BookingService {
         Set<String> uniqueLabels = new LinkedHashSet<>();
 
         for (String label : seatLabels) {
-
             String normalized = label.trim().toUpperCase();
 
             if (!uniqueLabels.add(normalized)) {
                 throw new ValidationException("Duplicate seat selected: " + normalized);
             }
-        }
 
+        }
         Screen screen = screenService.getScreen(show.getScreenId());
         List<Seat> resolvedSeats = new ArrayList<>();
 
         for (String label : uniqueLabels) {
-
             Seat seat = findSeatByLabel(screen, label)
                     .orElseThrow(() -> new ValidationException("Seat " + label + " does not exist on this screen."));
-
             resolvedSeats.add(seat);
         }
 
         List<ShowSeat> showSeats = new ArrayList<>();
 
         for (Seat seat : resolvedSeats) {
-
             ShowSeat showSeat = showSeatRepository.findByShowIdAndSeatId(showId, seat.getSeatId())
                     .orElseThrow(() -> new ResourceNotFoundException(
                             "Seat state not initialized for seat " + seat.getLabel() + "."));
@@ -81,7 +76,6 @@ public class BookingService {
             if (!showSeat.isAvailable()) {
                 throw new SeatUnavailableException("Seat " + seat.getLabel() + " is already booked.");
             }
-
             showSeats.add(showSeat);
         }
 
@@ -109,7 +103,6 @@ public class BookingService {
     }
 
     public void cancelBooking(long userId, long bookingId) {
-
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new ResourceNotFoundException("Booking not found with ID: " + bookingId));
 
@@ -119,7 +112,6 @@ public class BookingService {
         if (booking.getStatus() != BookingStatus.CONFIRMED) {
             throw new BookingException("Only confirmed bookings can be cancelled.");
         }
-
         booking.cancel();
         bookingRepository.save(booking);
 

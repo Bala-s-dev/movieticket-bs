@@ -26,7 +26,6 @@ public final class DateTimeUtil {
             // }
 
             return date;
-
         } catch (DateTimeParseException e) {
             throw new IllegalArgumentException("Invalid date format. Expected dd-MM-yyyy.");
         }

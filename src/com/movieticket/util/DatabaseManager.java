@@ -2,37 +2,37 @@ package com.movieticket.util;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.SQLException;
 
 public final class DatabaseManager {
-    static DbConfig config;
-    static Connection connection;
 
-    static{
-        try{
+    private static final DbConfig config = new DbConfig();
+
+    static {
+        try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-        }catch(Exception e){
-            e.printStackTrace();
+            System.out.println("class loaded");
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException("MySQL JDBC Driver not found", e);
         }
     }
 
-    public DatabaseManager(){
-        config = new DbConfig();
-        try{
-            connection = DriverManager.getConnection(config.getUrl(),config.getUser(),config.getPassword());
-            System.out.println("Db connected success");
-        }catch(Exception e){
-            e.printStackTrace();
-        }
+    private DatabaseManager() {
     }
-    public static Connection getConnection(){
-        return connection;
-    }
-    public static void closeConnection(){
-        try{
-            connection.close();
-        }catch(Exception e){
-            e.printStackTrace();
+
+    public static Connection getConnection() {
+        try {
+            return DriverManager.getConnection(
+                config.getUrl(),
+                config.getUser(),
+                config.getPassword()
+            );
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to connect to database", e);
         }
     }
 
+    public static void closeConnection() {
+        // Maintained for backward compatibility
+    }
 }

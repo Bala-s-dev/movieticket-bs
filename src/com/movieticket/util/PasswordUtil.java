@@ -9,11 +9,7 @@ public class PasswordUtil {
 
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-256");
-
-            byte[] bytes = md.digest(
-                    password.getBytes(StandardCharsets.UTF_8)
-            );
-
+            byte[] bytes = md.digest(password.getBytes(StandardCharsets.UTF_8));
             StringBuilder result = new StringBuilder();
 
             for (byte b : bytes) {
@@ -21,7 +17,7 @@ public class PasswordUtil {
             }
 
             return result.toString();
-
+            
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

@@ -17,7 +17,7 @@ public class DAOAdminRepository implements AdminRepository {
         String sql = "INSERT INTO admins (name, email, phone, password) " +
                 "VALUES (?, ?, ?, ?) " +
                 "ON DUPLICATE KEY UPDATE " +
-                "admin_id = LAST_INSERT_ID(admin_id), " +
+                "id = LAST_INSERT_ID(id), " +
                 "name = VALUES(name), " +
                 "phone = VALUES(phone), " +
                 "password = VALUES(password)";
@@ -36,7 +36,7 @@ public class DAOAdminRepository implements AdminRepository {
 
             try (ResultSet rs = ps.getGeneratedKeys()) {
                 if (rs.next()) {
-                    admin.setAdminId(rs.getInt(1));
+                    admin.setAdminId(rs.getLong(1));
                 }
             }
 
@@ -49,7 +49,7 @@ public class DAOAdminRepository implements AdminRepository {
 
     @Override
     public Optional<Admin> findById(long id) {
-        String sql = "SELECT * FROM admins WHERE admin_id = ?";
+        String sql = "SELECT * FROM admins WHERE id = ?";
         try (Connection conn = DatabaseManager.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setLong(1, id);

@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Map;
 
 public class ScreenController {
-
     private final ScreenService screenService;
     private final InputUtil input;
 
@@ -41,7 +40,6 @@ public class ScreenController {
                 case 3 -> viewScreens(admin);
                 case 4 -> viewSeatLayout(admin);
                 case 5 -> back = true;
-
                 default -> System.out.println("Invalid choice. Please try again.");
             }
         }
@@ -57,7 +55,6 @@ public class ScreenController {
                 ConsoleUtil.printError("At least one row must be configured.");
                 return;
             }
-
             List<ScreenService.RowConfig> rowConfigs = new ArrayList<>();
 
             for (int i = 0; i < rowCount; i++) {
@@ -70,11 +67,9 @@ public class ScreenController {
                     System.out.println("Using default row letter: " + rowLetterStr);
                 }
                 
-
                 if (rowLetterStr.length() != 1 || !Character.isLetter(rowLetterStr.charAt(0))) {
                     ConsoleUtil.printError("Invalid row letter. Please enter a single letter (A-Z).");
                     i--; 
-
                     continue;
                 }
 
@@ -101,7 +96,6 @@ public class ScreenController {
                 case 1: return SeatCategory.GOLD;
                 case 2: return SeatCategory.PLATINUM;
                 case 3: return SeatCategory.SILVER;
-
                 default: System.out.println("Invalid choice.");
             }
         }
@@ -126,7 +120,7 @@ public class ScreenController {
                 System.out.println("No screens found for this theatre.");
                 return;
             }
-           
+            
             ConsoleUtil.printLine();
             System.out.printf("%-10s | %-20s | %-10s | %-8s%n", "ID", "Name", "Seats", "Status");
             ConsoleUtil.printLine();
@@ -135,8 +129,8 @@ public class ScreenController {
                 System.out.printf("%-10d | %-20s | %-10d | %-8s%n",
                         s.getScreenId(), s.getScreenName(), s.getTotalSeatCount(), s.isActive() ? "ACTIVE" : "REMOVED");
            
-                    }
-                    
+            }
+            
             ConsoleUtil.printLine();
         } catch (ApplicationException e) {
             ConsoleUtil.printError(e.getMessage());

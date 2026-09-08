@@ -17,7 +17,6 @@ import java.util.List;
 public class ScreenService {
 
     public static class RowConfig {
-
         public final char row;
         public final SeatCategory category;
         public final int seatCount;
@@ -40,7 +39,6 @@ public class ScreenService {
     }
 
     public Screen addScreen(long theatreId, long adminId, String screenName, List<RowConfig> rowConfigs) {
-
         Theatre theatre = theatreService.getOwnedTheatre(theatreId, adminId);
 
         if (screenName == null || screenName.trim().isEmpty()) {
@@ -71,21 +69,16 @@ public class ScreenService {
             List<Seat> seats = new ArrayList<>();
 
             for (int seatNumber = 1; seatNumber <= rowConfig.seatCount; seatNumber++) {
-
                 seats.add(new Seat(IdGenerator.nextSeatId(), screen.getScreenId(), rowConfig.row,
                         seatNumber, rowConfig.category));
             }
-
             screen.addRow(rowConfig.row, seats);
         }
-
         return screenRepository.save(screen);
     }
 
     public List<Screen> viewScreens(long theatreId, long adminId) {
-
         theatreService.getOwnedTheatre(theatreId, adminId);
-
         return screenRepository.findByTheatreId(theatreId);
     }
 
@@ -100,12 +93,10 @@ public class ScreenService {
     }
 
     public Screen getScreen(long screenId, long adminId) {
-
         Screen screen = screenRepository.findById(screenId).orElseThrow(() ->
                         new ResourceNotFoundException("Screen not found with ID: " + screenId));
 
         theatreService.getOwnedTheatre(screen.getTheatreId(), adminId);
-
         return screen;
     }
 
@@ -114,11 +105,8 @@ public class ScreenService {
     }
 
     public void removeScreen(long screenId, long adminId) {
-
         Screen screen = getOwnedScreen(screenId, adminId);
-
         LocalDateTime currentDateTime = LocalDateTime.now();
-
         boolean hasFutureShow = showRepository
                 .findByScreenId(screenId)
                 .stream()
@@ -132,7 +120,6 @@ public class ScreenService {
             throw new ValidationException("Cannot remove screen '" + screen.getScreenName()
                     + "': it has active/future shows.");
         }
-
         screen.setActive(false);
         screenRepository.save(screen);
     }

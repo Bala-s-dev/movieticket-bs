@@ -10,6 +10,7 @@ import com.movieticket.util.IdGenerator;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
 
 public class MovieService {
@@ -65,12 +66,11 @@ public class MovieService {
                 .orElseThrow(() -> new ResourceNotFoundException("Movie not found with ID: " + movieId));
     }
 
-    public List<Movie> viewAllMovies() {
+    public Collection<Movie> viewAllMovies() {
         return movieRepository.findAll();
     }
 
     public List<Movie> browseAvailableMovies() {
-
         LocalDateTime now = LocalDateTime.now();
 
         List<Long> movieIdsWithFutureShows = showRepository.findAll().stream()
@@ -85,11 +85,9 @@ public class MovieService {
                 .toList();
     }
 
-    public List<Movie> searchMovies(String query, boolean onlyWithFutureShows) {
-
+    public Collection<Movie> searchMovies(String query, boolean onlyWithFutureShows) {
         String q = query == null ? "" : query.trim().toLowerCase();
-        List<Movie> base = onlyWithFutureShows ? browseAvailableMovies() : movieRepository.findAll();
-        
+        Collection<Movie> base = onlyWithFutureShows ? browseAvailableMovies() : movieRepository.findAll();
         return base.stream()
                 .filter(m -> m.getName().toLowerCase().contains(q))
                 .toList();

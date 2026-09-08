@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 
 public class Show {
     
-    private final long id;
+    private long id;
     private final long movieId;
     private final long screenId;
     private LocalDateTime startDateTime;

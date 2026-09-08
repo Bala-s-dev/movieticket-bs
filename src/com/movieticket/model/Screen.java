@@ -7,12 +7,13 @@ import java.util.List;
 import java.util.Map;
 
 public class Screen {
-    private final long id;
+    private long id;
     private String screenName;
-    private final long theatreId;
+    private long theatreId;
     private final Map<Character, List<Seat>> seatLayout = new LinkedHashMap<>();
     private boolean active;
 
+    
     public Screen(long screenId, String screenName, long theatreId) {
         this.id = screenId;
         this.screenName = screenName;
@@ -20,8 +21,16 @@ public class Screen {
         this.active = true;
     }
 
+    public Screen(){
+
+    }
+
     public long getScreenId() { 
         return id; 
+    }
+
+    public void setScreenId(Long id){
+        this.id = id;
     }
 
     public String getScreenName() { 
@@ -30,6 +39,10 @@ public class Screen {
     
     public long getTheatreId() { 
         return theatreId; 
+    }
+
+    public void setTheatreId(long theatreId){
+        this.theatreId = theatreId;
     }
     
     public boolean isActive() { 

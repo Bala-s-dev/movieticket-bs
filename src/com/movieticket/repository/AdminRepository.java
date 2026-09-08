@@ -2,7 +2,6 @@ package com.movieticket.repository;
 
 import com.movieticket.model.Admin;
 
-import java.util.List;
 import java.util.Optional;
 
 public interface AdminRepository {

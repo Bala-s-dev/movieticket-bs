@@ -146,7 +146,6 @@ public class ReportService {
                 .collect(Collectors.toMap(Show::getShowId, sh -> sh, (a, b) -> a));
 
         RevenueReport report = new RevenueReport(fromDate, toDate);
-
         Map<Long, Theatre> theatreCache = new HashMap<>();
         Map<Long, Movie> movieCache = new HashMap<>();
 
@@ -163,28 +162,25 @@ public class ReportService {
             }
 
             Show show = ownedShowsById.get(booking.getShowId());
-            
             if (show == null) {
                 continue;
-                }
+            }
 
             Screen screen = ownedScreensById.get(show.getScreenId());
-            
+
             Theatre theatre = theatreCache.computeIfAbsent(screen.getTheatreId(),
-                    id -> theatreRepository.findById(id).orElse(null));
-                    
+                    id -> theatreRepository.findById(id).orElse(null));    
+                     
             Movie movie = movieCache.computeIfAbsent(show.getMovieId(),
                     id -> movieRepository.findById(id).orElse(null));
 
             String movieLabel = movie != null ? movie.getName() : ("Movie #" + show.getMovieId());
             String theatreLabel = theatre != null ? theatre.getName() : ("Theatre #" + screen.getTheatreId());
 
-            report.byMovie
-                    .computeIfAbsent(show.getMovieId(), k -> new RevenueLine(movieLabel))
+            report.byMovie.computeIfAbsent(show.getMovieId(), k -> new RevenueLine(movieLabel))
                     .add(booking.getTotalAmount(), booking.getSeatIds().size());
 
-            report.byTheatre
-                    .computeIfAbsent(screen.getTheatreId(), k -> new RevenueLine(theatreLabel))
+            report.byTheatre.computeIfAbsent(screen.getTheatreId(), k -> new RevenueLine(theatreLabel))
                     .add(booking.getTotalAmount(), booking.getSeatIds().size());
 
             report.totalRevenue += booking.getTotalAmount();

@@ -3,9 +3,9 @@ package com.movieticket.repository.local;
 import com.movieticket.model.Movie;
 import com.movieticket.repository.MovieRepository;
 
-import java.util.ArrayList;
+// import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -25,8 +25,8 @@ public class LocalMovieRepository implements MovieRepository {
     }
 
     @Override
-    public List<Movie> findAll() {
-        return new ArrayList<>(movies.values());
+    public Collection<Movie> findAll() {
+        return movies.values();
     }
 
     @Override

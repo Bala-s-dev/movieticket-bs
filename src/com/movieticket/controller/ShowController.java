@@ -16,7 +16,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public class ShowController {
-
     private final ShowService showService;
     private final MovieService movieService;
     private final PricingConfigService pricingConfigService;
@@ -32,6 +31,7 @@ public class ShowController {
 
     public void showShowMenu(Admin admin) {
         boolean back = false;
+
         while (!back) {
             ConsoleUtil.printHeader("SHOW SECTION");
             System.out.println("1. Add Show");
@@ -40,6 +40,7 @@ public class ShowController {
             System.out.println("4. Search Shows");
             System.out.println("5. Back");
             int choice = input.readInt("Enter your choice: ");
+
             switch (choice) {
                 case 1 -> addShow(admin);
                 case 2 -> removeShow(admin);
@@ -63,6 +64,7 @@ public class ShowController {
 
             if (deriveEnd) {
                 boolean breakTime = input.readYesNo("Want to include break time ");
+
                 if(breakTime){
                     breakMinutes = input.readInt("Enter break time in minutes: ");
                 } else {
@@ -84,12 +86,14 @@ public class ShowController {
                 double gold = input.readDouble("Enter Gold Price: ");
                 double platinum = input.readDouble("Enter Platinum Price: ");
                 double silver = input.readDouble("Enter Silver Price: ");
+
                 if (gold < 0 || platinum < 0 || silver < 0) {
                     ConsoleUtil.printError("Prices must be non-negative.");
                     return;
                 }
+
                 pricing = new TicketPricing(gold, platinum, silver);
-                
+
             } else {
                 double price = input.readDouble("Enter Price: ");
                 pricing = pricingConfigService.getDefaultPricing(price);
@@ -128,14 +132,17 @@ public class ShowController {
             System.out.println("No shows found.");
             return;
         }
+
         ConsoleUtil.printLine();
         System.out.printf("%-8s | %-8s | %-8s | %-20s | %-8s%n", "ShowID", "MovieID", "ScreenID", "Start", "Status");
         ConsoleUtil.printLine();
+
         for (Show s : shows) {
             System.out.printf("%-8d | %-8d | %-8d | %-20s | %-8s%n",
                     s.getShowId(), s.getMovieId(), s.getScreenId(),
                     DateTimeUtil.formatDateTime(s.getStartDateTime()), s.isActive() ? "ACTIVE" : "REMOVED");
         }
+        
         ConsoleUtil.printLine();
     }
 }

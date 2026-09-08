@@ -10,7 +10,6 @@ import com.movieticket.util.IdGenerator;
 import com.movieticket.util.PasswordUtil;
 
 public class AuthService {
-
     private final UserRepository userRepository;
     private final AdminRepository adminRepository;
 
@@ -24,6 +23,7 @@ public class AuthService {
         if (userRepository.existsByEmail(email)) {
             throw new ValidationException("A user with this email is already registered.");
         }
+
         String hashedPassword = PasswordUtil.hashPassword(password);
         User user = new User(IdGenerator.nextUserId(), name, email, phone, hashedPassword);
         
@@ -37,7 +37,6 @@ public class AuthService {
         }
         
         String hashedPassword = PasswordUtil.hashPassword(password);
-
         Admin admin = new Admin(IdGenerator.nextAdminId(), name, email, phone, hashedPassword);
 
         return adminRepository.save(admin);
@@ -47,7 +46,6 @@ public class AuthService {
 
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new AuthenticationException("Invalid email or password."));
-
         String hashedPassword = PasswordUtil.hashPassword(password);
 
         if (!user.checkPassword(hashedPassword)) {
@@ -61,7 +59,6 @@ public class AuthService {
 
         Admin admin = adminRepository.findByEmail(email)
                 .orElseThrow(() -> new AuthenticationException("Invalid email or password."));
-
         String hashedPassword = PasswordUtil.hashPassword(password);
 
         if (!admin.checkPassword(hashedPassword)) {

@@ -9,7 +9,6 @@ public class InputUtil {
 
     private static final String DATE_FORMAT = "dd-MM-yyyy";
     private static final String TIME_FORMAT = "HH:mm";
-
     private final Scanner scanner;
 
     public InputUtil(Scanner scanner) {
@@ -38,11 +37,7 @@ public class InputUtil {
         }
     }
 
-    public String readNonEmptyStringWithValidation(
-            String prompt,
-            String regex,
-            String errorMessage) {
-
+    public String readNonEmptyStringWithValidation(String prompt, String regex, String errorMessage) {
         while (true) {
             System.out.print(prompt);
             String input = scanner.nextLine().trim();
@@ -62,12 +57,14 @@ public class InputUtil {
 
             try {
                 int n = Integer.parseInt(input);
+
                 if(n <= 0){
                     System.out.println("Invalid number. Please enter a valid integer.");
                 }
                 else{
                     return n;
                 }
+
             } catch (NumberFormatException exception) {
                 System.out.println("Invalid number. Please enter a valid integer.");
             }
@@ -81,12 +78,14 @@ public class InputUtil {
 
             try {
                 long n = Long.parseLong(input);
+
                 if(n <= 0){
                     System.out.println("Invalid ID. Please enter a valid ID.");
                 }
                 else{
                     return n;
                 }
+
             } catch (NumberFormatException exception) {
                 System.out.println("Invalid number. Please enter a valid ID.");
             }
@@ -100,12 +99,14 @@ public class InputUtil {
 
             try {
                 double n = Double.parseDouble(input);
+
                 if(n <= 0){
                     System.out.println("Invalid price/amount. Please enter a valid price/amount.");
                 }
                 else{
                     return n;
                 }
+
             } catch (NumberFormatException exception) {
                 System.out.println("Invalid number. Please enter a valid price/amount.");
             }
@@ -122,6 +123,7 @@ public class InputUtil {
             } catch (IllegalArgumentException exception) {
                 System.out.println(exception.getMessage());
             }
+
         }
     }
 
@@ -138,11 +140,12 @@ public class InputUtil {
                 LocalTime time = DateTimeUtil.parseTime(timeInput);
 
                 DateTimeUtil.validateDateTime(date, time);
-
+                
                 return LocalDateTime.of(date, time);
             } catch (IllegalArgumentException exception) {
                 System.out.println(exception.getMessage());
             }
+
         }
     }
 

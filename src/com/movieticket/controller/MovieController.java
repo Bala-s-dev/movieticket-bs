@@ -7,10 +7,10 @@ import com.movieticket.util.ConsoleUtil;
 import com.movieticket.util.InputUtil;
 
 import java.time.LocalDate;
-import java.util.List;
+import java.util.Collection;
+
 
 public class MovieController {
-
     private final MovieService movieService;
     private final InputUtil input;
 
@@ -21,6 +21,7 @@ public class MovieController {
 
     public void showMovieMenu() {
         boolean back = false;
+
         while (!back) {
             ConsoleUtil.printHeader("MOVIE SECTION");
             System.out.println("1. Add Movie");
@@ -29,6 +30,7 @@ public class MovieController {
             System.out.println("4. Search Movie");
             System.out.println("5. Back");
             int choice = input.readInt("Enter your choice: ");
+
             switch (choice) {
                 case 1 -> addMovie();
                 case 2 -> removeMovie();
@@ -41,6 +43,7 @@ public class MovieController {
     }
 
     private void addMovie() {
+        
         try {
             String name = input.readNonEmptyString("Movie name: ");
             String description = input.readString("Description: ");
@@ -67,17 +70,17 @@ public class MovieController {
     }
 
     private void viewMovies() {
-        List<Movie> movies = movieService.viewAllMovies();
+        Collection<Movie> movies = movieService.viewAllMovies();
         printMovieTable(movies);
     }
 
     private void searchMovie() {
         String query = input.readString("Enter search text: ");
-        List<Movie> results = movieService.searchMovies(query, false);
+        Collection<Movie> results = movieService.searchMovies(query, false);
         printMovieTable(results);
     }
 
-    static void printMovieTable(List<Movie> movies) {
+    static void printMovieTable(Collection<Movie> movies) {
         if (movies.isEmpty()) {
             System.out.println("No movies found.");
             return;
