@@ -30,26 +30,27 @@ public class AdminController {
     }
 
     public void registerFlow() {
-
         ConsoleUtil.printHeader("ADMIN REGISTRATION");
 
-        String name = input.readNonEmptyStringWithValidation("Name: ", "^[a-zA-Z\\s]+$", "Invalid name. Please enter a valid name.");
+        String name = input.readNonEmptyStringWithValidation("Name: ", "^[a-zA-Z\\s]+$", 
+            "Invalid name. Please enter a valid name.");
 
-        String email = input.readNonEmptyStringWithValidation("Email: ", "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", "Invalid email. Please enter a valid email.");
+        String email = input.readNonEmptyStringWithValidation("Email: ", "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", 
+            "Invalid email. Please enter a valid email.");
         // validateUtil.validateEmail(email);
 
-        String phone = input.readNonEmptyStringWithValidation("Phone: ", "^\\d{10}$", "Invalid phone number. Please enter a 10-digit phone number.");
+        String phone = input.readNonEmptyStringWithValidation("Phone: ", "^\\d{10}$", 
+            "Invalid phone number. Please enter a 10-digit phone number.");
         // validateUtil.validatePhone(phone);
 
-        String password = input.readNonEmptyStringWithValidation("Password: ", "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$", "Invalid password. Please enter a valid password.");
+        String password = input.readNonEmptyStringWithValidation("Password: ", "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$", 
+            "Invalid password. Please enter a valid password.");
         // validateUtil.validatePassword(password);
 
         try {
             Admin admin = authService.registerAdmin(name, email, phone, password);
             ConsoleUtil.printSuccess("Admin registered successfully with ID: " + admin.getAdminId());
-
-            loginAdmin(email, password);
-            
+            loginAdmin(email, password); 
         } catch (ApplicationException e) {
             ConsoleUtil.printError(e.getMessage());
             System.out.println("Please try again.");
@@ -58,14 +59,12 @@ public class AdminController {
     }
 
     public void loginFlow() {
-        
-        ConsoleUtil.printHeader("ADMIN LOGIN");     
-        
-        String email = input.readNonEmptyStringWithValidation("Email: ", "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", "Invalid email. Please enter a valid email.");
-        String password = input.readNonEmptyStringWithValidation("Password: ", "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$", "Invalid password. Please enter a valid password.");
-
+        ConsoleUtil.printHeader("ADMIN LOGIN");
+        String email = input.readNonEmptyStringWithValidation("Email: ", "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", 
+            "Invalid email. Please enter a valid email.");
+        String password = input.readNonEmptyStringWithValidation("Password: ", "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$", 
+            "Invalid password. Please enter a valid password.");
         loginAdmin(email, password);
-        
     }
 
     public void loginAdmin(String email, String password){
@@ -80,6 +79,7 @@ public class AdminController {
 
     private void showAdminMenu(Admin admin) {
         boolean logout = false;
+
         while (!logout) {
             ConsoleUtil.printHeader("ADMIN MENU");
             System.out.println("1. Movie Section");
@@ -89,6 +89,7 @@ public class AdminController {
             System.out.println("5. Revenue Report");
             System.out.println("6. Logout");
             int choice = input.readInt("Enter your choice: ");
+            
             switch (choice) {
                 case 1 -> movieController.showMovieMenu();
                 case 2 -> theatreController.showTheatreMenu(admin);

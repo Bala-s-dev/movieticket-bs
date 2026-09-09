@@ -16,7 +16,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public class ShowController {
-
     private final ShowService showService;
     private final MovieService movieService;
     private final PricingConfigService pricingConfigService;
@@ -32,6 +31,7 @@ public class ShowController {
 
     public void showShowMenu(Admin admin) {
         boolean back = false;
+
         while (!back) {
             ConsoleUtil.printHeader("SHOW SECTION");
             System.out.println("1. Add Show");
@@ -40,6 +40,7 @@ public class ShowController {
             System.out.println("4. Search Shows");
             System.out.println("5. Back");
             int choice = input.readInt("Enter your choice: ");
+
             switch (choice) {
                 case 1 -> addShow(admin);
                 case 2 -> removeShow(admin);
@@ -59,6 +60,7 @@ public class ShowController {
             LocalDateTime start = input.readDateTime("Show start");
             LocalDateTime end;
             boolean deriveEnd = input.readYesNo("Derive end time from movie duration?");
+
             if (deriveEnd) {
                 Movie movie = movieService.getMovie(movieId);
                 end = start.plusMinutes(movie.getDurationMinutes());
@@ -70,10 +72,12 @@ public class ShowController {
             TicketPricing pricing;
             System.out.println("1. Use Default Pricing  2. Customize Pricing");
             int pricingChoice = input.readInt("Enter choice: ");
+
             if (pricingChoice == 2) {
                 double gold = input.readDouble("Enter Gold Price: ");
                 double platinum = input.readDouble("Enter Platinum Price: ");
                 double silver = input.readDouble("Enter Silver Price: ");
+                
                 if (gold < 0 || platinum < 0 || silver < 0) {
                     ConsoleUtil.printError("Prices must be non-negative.");
                     return;
@@ -117,9 +121,11 @@ public class ShowController {
             System.out.println("No shows found.");
             return;
         }
+
         ConsoleUtil.printLine();
         System.out.printf("%-8s | %-8s | %-8s | %-20s | %-8s%n", "ShowID", "MovieID", "ScreenID", "Start", "Status");
         ConsoleUtil.printLine();
+        
         for (Show s : shows) {
             System.out.printf("%-8d | %-8d | %-8d | %-20s | %-8s%n",
                     s.getShowId(), s.getMovieId(), s.getScreenId(),

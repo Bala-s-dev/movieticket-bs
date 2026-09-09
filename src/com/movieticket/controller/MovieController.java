@@ -10,7 +10,6 @@ import java.time.LocalDate;
 import java.util.List;
 
 public class MovieController {
-
     private final MovieService movieService;
     private final InputUtil input;
 
@@ -21,6 +20,7 @@ public class MovieController {
 
     public void showMovieMenu() {
         boolean back = false;
+
         while (!back) {
             ConsoleUtil.printHeader("MOVIE SECTION");
             System.out.println("1. Add Movie");
@@ -29,6 +29,7 @@ public class MovieController {
             System.out.println("4. Search Movie");
             System.out.println("5. Back");
             int choice = input.readInt("Enter your choice: ");
+
             switch (choice) {
                 case 1 -> addMovie();
                 case 2 -> removeMovie();
@@ -49,7 +50,6 @@ public class MovieController {
             int duration = input.readInt("Duration (minutes): ");
             LocalDate releaseDate = input.readDate("Release date");
             double rating = input.readDouble("Rating (0-10): ");
-
             Movie movie = movieService.addMovie(name, description, language, genre, duration, releaseDate, rating);
             ConsoleUtil.printSuccess("Movie added successfully with ID: " + movie.getMovieId());
         } catch (ApplicationException | IllegalArgumentException e) {
@@ -83,10 +83,12 @@ public class MovieController {
             System.out.println("No movies found.");
             return;
         }
+
         ConsoleUtil.printLine();
         System.out.printf("%-6s | %-25s | %-10s | %-12s | %-6s | %-8s%n",
                 "ID", "Name", "Language", "Genre", "Rating", "Status");
         ConsoleUtil.printLine();
+        
         for (Movie m : movies) {
             System.out.printf("%-6d | %-25s | %-10s | %-12s | %-6.1f | %-8s%n",
                     m.getMovieId(), m.getName(), m.getLanguage(), m.getGenre(), m.getRating(),

@@ -12,7 +12,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class UserController {
-
     private final AuthService authService;
     private final MovieService movieService;
     private final ShowService showService;
@@ -33,8 +32,7 @@ public class UserController {
         this.input = input;
     }
 
-    public void registerFlow() {
-            
+    public void registerFlow() {   
         ConsoleUtil.printHeader("USER REGISTRATION");
 
         String name = input.readNonEmptyStringWithValidation("Name: ", "^[a-zA-Z\\s]+$", "Invalid name. Please enter a valid name.");
@@ -78,6 +76,7 @@ public class UserController {
 
     private void showUserMenu(User user) {
         boolean logout = false;
+        
         while (!logout) {
             ConsoleUtil.printHeader("USER MENU");
             System.out.println("1. Browse Movies");
@@ -89,6 +88,7 @@ public class UserController {
             System.out.println("7. Booking History");
             System.out.println("8. Logout");
             int choice = input.readInt("Enter your choice: ");
+            
             switch (choice) {
                 case 1 -> browseMovies();
                 case 2 -> searchMovie();
@@ -119,15 +119,18 @@ public class UserController {
 
     private void viewShows() {
         long movieId = input.readLong("Enter Movie ID: ");
+        
         try {
             Movie movie = movieService.getMovie(movieId);
             List<Show> shows = showService.viewUpcomingShowsForMovie(movieId);
+        
             if (shows.isEmpty()) {
                 System.out.println("No upcoming shows for " + movie.getName() + ".");
                 return;
             }
             System.out.println("Movie: " + movie.getName());
             int i = 1;
+        
             for (Show s : shows) {
                 Screen screen = screenService.getScreen(s.getScreenId());
                 Theatre theatre = theatreService.getTheatre(screen.getTheatreId());
@@ -180,6 +183,7 @@ public class UserController {
                 Optional<Seat> seatOpt = screen.getAllSeats().stream()
                         .filter(s -> s.getLabel().equalsIgnoreCase(label))
                         .findFirst();
+
                 if (seatOpt.isEmpty()) {
                     ConsoleUtil.printError("Seat " + label + " does not exist on this screen.");
                     return;
@@ -188,6 +192,7 @@ public class UserController {
             }
             System.out.println();
             System.out.println("Selected Seats:");
+
             for (Seat seat : selected) {
                 double price = show.getPricing().getPrice(seat.getCategory());
                 total += price;
@@ -195,13 +200,12 @@ public class UserController {
             }
             System.out.println();
             System.out.println("Total: Rs." + total);
-
             boolean confirm = input.readYesNo("Confirm booking?");
+
             if (!confirm) {
                 System.out.println("Booking cancelled by user.");
                 return;
             }
-
             Booking booking = bookingService.bookSeats(user.getUserId(), showId, seatLabels);
             printBookingConfirmation(booking, show, screen);
         } catch (ApplicationException e) {
@@ -222,6 +226,7 @@ public class UserController {
         System.out.println("Time       : " + DateTimeUtil.formatTime(show.getStartDateTime().toLocalTime()));
         System.out.println();
         System.out.println("Seats:");
+        
         for (Long seatId : booking.getSeatIds()) {
             screen.getAllSeats().stream()
                     .filter(s -> s.getSeatId() == seatId)
@@ -247,6 +252,7 @@ public class UserController {
 
     private void bookingHistory(User user) {
         List<Booking> bookings = bookingService.getBookingHistory(user.getUserId());
+
         if (bookings.isEmpty()) {
             System.out.println("No bookings found.");
             return;
@@ -255,6 +261,7 @@ public class UserController {
         System.out.printf("%-10s | %-20s | %-12s | %-20s | %-10s | %-10s%n",
                 "BookingID", "Movie", "Date", "Seats", "Amount", "Status");
         ConsoleUtil.printLine();
+
         for (Booking b : bookings) {
             try {
                 Show show = showService.getShow(b.getShowId());
@@ -280,20 +287,27 @@ public class UserController {
 
     private void printSeatGrid(Screen screen, List<ShowSeat> showSeats, Set<Long> selectedSeatIds) {
         Map<Long, ShowSeat> stateBySeatId = new HashMap<>();
+
         for (ShowSeat ss : showSeats) {
             stateBySeatId.put(ss.getSeatId(), ss);
         }
         System.out.println("                 SCREEN");
         System.out.println("        ----------------------------------");
+
         for (Map.Entry<Character, List<Seat>> entry : screen.getSeatLayout().entrySet()) {
             List<Seat> seats = entry.getValue();
-            if (seats.isEmpty()) continue;
+
+            if (seats.isEmpty()){
+                continue;
+            }
             System.out.println();
             System.out.println(seats.get(0).getCategory());
             StringBuilder sb = new StringBuilder();
+
             for (Seat seat : seats) {
                 ShowSeat state = stateBySeatId.get(seat.getSeatId());
                 String display;
+
                 if (selectedSeatIds.contains(seat.getSeatId())) {
                     display = "**";
                 } else if (state != null && !state.isAvailable()) {

@@ -11,7 +11,6 @@ import java.time.LocalDate;
 import java.util.List;
 
 public class ReportController {
-
     private final ReportService reportService;
     private final InputUtil input;
 
@@ -25,10 +24,9 @@ public class ReportController {
             ConsoleUtil.printHeader("REVENUE REPORT");
             LocalDate fromDate = input.readDate("From date");
             LocalDate toDate = input.readDate("To date");
-
+            
             ReportService.RevenueReport report =
                     reportService.generateRevenueReport(admin.getAdminId(), fromDate, toDate);
-
             printReport(report);
         } catch (ApplicationException e) {
             ConsoleUtil.printError(e.getMessage());
@@ -47,12 +45,14 @@ public class ReportController {
         List<ReportService.RevenueLine> byMovie = report.getByMovieSorted();
         System.out.println();
         System.out.println("Breakdown by Movie:");
+
         if (byMovie.isEmpty()) {
             System.out.println("  No confirmed bookings in this period.");
         } else {
             ConsoleUtil.printLine();
             System.out.printf("%-25s | %-12s | %-10s | %-10s%n", "Movie", "Revenue", "Tickets", "Bookings");
             ConsoleUtil.printLine();
+
             for (ReportService.RevenueLine line : byMovie) {
                 System.out.printf("%-25s | Rs.%-9.1f | %-10d | %-10d%n",
                         line.getLabel(), line.getAmount(), line.getTicketsSold(), line.getBookingCount());
@@ -63,12 +63,14 @@ public class ReportController {
         List<ReportService.RevenueLine> byTheatre = report.getByTheatreSorted();
         System.out.println();
         System.out.println("Breakdown by Theatre:");
+
         if (byTheatre.isEmpty()) {
             System.out.println("  No confirmed bookings in this period.");
         } else {
             ConsoleUtil.printLine();
             System.out.printf("%-25s | %-12s | %-10s | %-10s%n", "Theatre", "Revenue", "Tickets", "Bookings");
             ConsoleUtil.printLine();
+
             for (ReportService.RevenueLine line : byTheatre) {
                 System.out.printf("%-25s | Rs.%-9.1f | %-10d | %-10d%n",
                         line.getLabel(), line.getAmount(), line.getTicketsSold(), line.getBookingCount());

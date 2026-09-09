@@ -10,7 +10,6 @@ import java.util.Map;
 import java.util.Optional;
 
 public class LocalScreenRepository implements ScreenRepository {
-
     private final Map<Long, Screen> screens = new HashMap<>();
 
     @Override

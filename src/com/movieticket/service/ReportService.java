@@ -150,13 +150,14 @@ public class ReportService {
         Map<Long, Movie> movieCache = new HashMap<>();
 
         List<Booking> allBookings = bookingRepository.findAll();
+        
         for (Booking booking : allBookings) {
-
             if (booking.getStatus() != BookingStatus.CONFIRMED) {
                 continue;
             }
 
             LocalDateTime bookedAt = booking.getBookingDateTime();
+            
             if (bookedAt.isBefore(rangeStart) || bookedAt.isAfter(rangeEnd)) {
                 continue;
             }
@@ -165,7 +166,7 @@ public class ReportService {
             
             if (show == null) {
                 continue;
-                }
+            }
 
             Screen screen = ownedScreensById.get(show.getScreenId());
             

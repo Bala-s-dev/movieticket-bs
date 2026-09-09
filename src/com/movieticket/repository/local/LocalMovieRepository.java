@@ -10,7 +10,6 @@ import java.util.Map;
 import java.util.Optional;
 
 public class LocalMovieRepository implements MovieRepository {
-
     private final Map<Long, Movie> movies = new HashMap<>();
 
     @Override

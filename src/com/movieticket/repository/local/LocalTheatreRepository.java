@@ -10,12 +10,10 @@ import java.util.Map;
 import java.util.Optional;
 
 public class LocalTheatreRepository implements TheatreRepository {
-
     private final Map<Long, Theatre> theatres = new HashMap<>();
 
     @Override
     public Theatre save(Theatre theatre) {
-        
         if(theatre == null){
             throw new IllegalArgumentException("Theatre cannot be null.");
         }

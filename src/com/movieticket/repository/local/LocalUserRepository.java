@@ -10,7 +10,6 @@ import java.util.Map;
 import java.util.Optional;
 
 public class LocalUserRepository implements UserRepository {
-
     private final Map<Long, User> users = new HashMap<>();
 
     @Override

@@ -14,7 +14,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public class ShowService {
-
     private final ShowRepository showRepository;
     private final ShowSeatRepository showSeatRepository;
     private final ScreenService screenService;
@@ -53,16 +52,15 @@ public class ShowService {
         boolean overlaps = showRepository.findByScreenId(screenId).stream()
                 .filter(Show::isActive)
                 .anyMatch(existing -> existing.overlapsWith(start, end));
+
         if (overlaps) {
             throw new ValidationException("This screen already has an overlapping show in that time range.");
         }
 
         Show show = new Show(IdGenerator.nextShowId(), movieId, screenId, start, end, pricing);
         showRepository.save(show);
-
         List<Long> seatIds = screen.getAllSeats().stream().map(Seat::getSeatId).toList();
         showSeatRepository.initializeForShow(show.getShowId(), seatIds);
-
         return show;
     }
 

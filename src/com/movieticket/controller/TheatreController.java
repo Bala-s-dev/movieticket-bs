@@ -10,7 +10,6 @@ import com.movieticket.util.InputUtil;
 import java.util.List;
 
 public class TheatreController {
-
     private final TheatreService theatreService;
     private final InputUtil input;
 
@@ -21,6 +20,7 @@ public class TheatreController {
 
     public void showTheatreMenu(Admin admin) {
         boolean back = false;
+
         while (!back) {
             ConsoleUtil.printHeader("THEATRE SECTION");
             System.out.println("1. Add Theatre");
@@ -28,6 +28,7 @@ public class TheatreController {
             System.out.println("3. View My Theatres");
             System.out.println("4. Back");
             int choice = input.readInt("Enter your choice: ");
+
             switch (choice) {
                 case 1 -> addTheatre(admin);
                 case 2 -> removeTheatre(admin);
@@ -61,6 +62,7 @@ public class TheatreController {
 
     public void viewMyTheatres(Admin admin) {
         List<Theatre> theatres = theatreService.viewMyTheatres(admin.getAdminId());
+        
         if (theatres.isEmpty()) {
             System.out.println("You have no theatres yet.");
             return;
@@ -68,6 +70,7 @@ public class TheatreController {
         ConsoleUtil.printLine();
         System.out.printf("%-8s | %-25s | %-20s | %-8s%n", "ID", "Name", "Location", "Status");
         ConsoleUtil.printLine();
+        
         for (Theatre t : theatres) {
             System.out.printf("%-8d | %-25s | %-20s | %-8s%n",
                     t.getTheatreId(), t.getName(), t.getLocation(), t.isActive() ? "ACTIVE" : "REMOVED");

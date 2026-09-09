@@ -10,7 +10,6 @@ import java.util.Map;
 import java.util.Optional;
 
 public class LocalShowRepository implements ShowRepository {
-
     private final Map<Long, Show> shows = new HashMap<>();
 
     @Override
@@ -48,10 +47,12 @@ public class LocalShowRepository implements ShowRepository {
         if(id <= 0){
             throw new IllegalArgumentException("Invalid show id.");
         }   
+
         if(shows.containsKey(id)){
             shows.remove(id);
         } else {
             throw new IllegalArgumentException("Show with id " + id + " does not exist.");
         }
+        
     }
 }

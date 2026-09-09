@@ -10,7 +10,6 @@ import java.util.Map;
 import java.util.Optional;
 
 public class LocalAdminRepository implements AdminRepository {
-
     private final Map<Long, Admin> admins = new HashMap<>();
 
     @Override

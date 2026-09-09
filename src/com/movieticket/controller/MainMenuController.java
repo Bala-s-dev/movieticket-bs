@@ -4,7 +4,6 @@ import com.movieticket.util.ConsoleUtil;
 import com.movieticket.util.InputUtil;
 
 public class MainMenuController {
-
     private final UserController userController;
     private final AdminController adminController;
     private final InputUtil input;
@@ -17,6 +16,7 @@ public class MainMenuController {
 
     public void run() {
         boolean exit = false;
+
         while (!exit) {
             ConsoleUtil.printHeader("MOVIE TICKET BOOKING SYSTEM");
             System.out.println("1. User Login");
@@ -25,6 +25,7 @@ public class MainMenuController {
             System.out.println("4. Admin Registration");
             System.out.println("5. Exit");
             int choice = input.readInt("Enter your choice: ");
+            
             switch (choice) {
                 case 1 -> userController.loginFlow();
                 case 2 -> userController.registerFlow();

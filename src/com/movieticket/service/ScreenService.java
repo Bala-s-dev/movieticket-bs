@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ScreenService {
-
     public static class RowConfig {
         public final char row;
         public final SeatCategory category;
@@ -66,6 +65,7 @@ public class ScreenService {
 
         for (RowConfig rc : rowConfigs) {
             List<Seat> seats = new ArrayList<>();
+            
             for (int i = 1; i <= rc.seatCount; i++) {
                 seats.add(new Seat(IdGenerator.nextSeatId(), screen.getScreenId(), rc.row, i, rc.category));
             }
@@ -102,6 +102,7 @@ public class ScreenService {
         LocalDateTime now = LocalDateTime.now();
         boolean hasFutureShow = showRepository.findByScreenId(screenId).stream()
                 .anyMatch(s -> s.isActive() && !s.getStartDateTime().isBefore(now));
+        
         if (hasFutureShow) {
             throw new ValidationException(
                     "Cannot remove screen '" + screen.getScreenName() + "': it has active/future shows.");

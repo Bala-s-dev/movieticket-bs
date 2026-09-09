@@ -14,7 +14,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public class TheatreService {
-
     private final TheatreRepository theatreRepository;
     private final ScreenRepository screenRepository;
     private final ShowRepository showRepository;
@@ -27,9 +26,11 @@ public class TheatreService {
     }
 
     public Theatre addTheatre(long adminId, String name, String location) {
+        
         if (name == null || name.trim().isEmpty()) {
             throw new ValidationException("Theatre name cannot be empty.");
         }
+        
         if (location == null || location.trim().isEmpty()) {
             throw new ValidationException("Theatre location cannot be empty.");
         }
@@ -48,6 +49,7 @@ public class TheatreService {
 
     public Theatre getOwnedTheatre(long theatreId, long adminId) {
         Theatre theatre = getTheatre(theatreId);
+        
         if (theatre.getAdminId() != adminId) {
             throw new UnauthorizedAccessException("You do not have permission to access this theatre.");
         }
@@ -57,11 +59,12 @@ public class TheatreService {
     public void removeTheatre(long theatreId, long adminId) {
         Theatre theatre = getOwnedTheatre(theatreId, adminId);
         LocalDateTime now = LocalDateTime.now();
-
         List<Screen> screens = screenRepository.findByTheatreId(theatreId);
+        
         for (Screen screen : screens) {
             boolean hasFutureShow = showRepository.findByScreenId(screen.getScreenId()).stream()
                     .anyMatch(s -> s.isActive() && !s.getStartDateTime().isBefore(now));
+            
             if (hasFutureShow) {
                 throw new ValidationException(
                         "Cannot remove theatre '" + theatre.getName() +

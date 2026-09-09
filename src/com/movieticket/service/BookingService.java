@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.Set;
 
 public class BookingService {
-
     private final BookingRepository bookingRepository;
     private final ShowSeatRepository showSeatRepository;
     private final ShowService showService;
@@ -37,7 +36,6 @@ public class BookingService {
     }
 
     public Booking bookSeats(long userId, long showId, List<String> seatLabels) {
-
         Show show = showService.getShow(showId);
 
         if (!show.isActive() || show.getStartDateTime().isBefore(LocalDateTime.now())) {
@@ -51,7 +49,6 @@ public class BookingService {
         Set<String> uniqueLabels = new LinkedHashSet<>();
 
         for (String label : seatLabels) {
-
             String normalized = label.trim().toUpperCase();
 
             if (!uniqueLabels.add(normalized)) {
@@ -63,17 +60,14 @@ public class BookingService {
         List<Seat> resolvedSeats = new ArrayList<>();
 
         for (String label : uniqueLabels) {
-
             Seat seat = findSeatByLabel(screen, label)
                     .orElseThrow(() -> new ValidationException("Seat " + label + " does not exist on this screen."));
-
             resolvedSeats.add(seat);
         }
 
         List<ShowSeat> showSeats = new ArrayList<>();
 
         for (Seat seat : resolvedSeats) {
-
             ShowSeat showSeat = showSeatRepository.findByShowIdAndSeatId(showId, seat.getSeatId())
                     .orElseThrow(() -> new ResourceNotFoundException(
                             "Seat state not initialized for seat " + seat.getLabel() + "."));
@@ -81,7 +75,6 @@ public class BookingService {
             if (!showSeat.isAvailable()) {
                 throw new SeatUnavailableException("Seat " + seat.getLabel() + " is already booked.");
             }
-
             showSeats.add(showSeat);
         }
 
@@ -103,19 +96,18 @@ public class BookingService {
         }
 
         Booking booking = new Booking(IdGenerator.nextBookingId(), userId, showId,
-                LocalDateTime.now(), seatIds, total);
-            
+                LocalDateTime.now(), seatIds, total);           
         return bookingRepository.save(booking);
     }
 
     public void cancelBooking(long userId, long bookingId) {
-
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new ResourceNotFoundException("Booking not found with ID: " + bookingId));
 
         if (booking.getUserId() != userId) {
             throw new UnauthorizedAccessException("You cannot cancel another user's booking.");
         }
+        
         if (booking.getStatus() != BookingStatus.CONFIRMED) {
             throw new BookingException("Only confirmed bookings can be cancelled.");
         }

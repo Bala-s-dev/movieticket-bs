@@ -10,7 +10,6 @@ import java.util.Map;
 import java.util.Optional;
 
 public class LocalBookingRepository implements BookingRepository {
-
     private final Map<Long, Booking> bookings = new HashMap<>();
 
     @Override
