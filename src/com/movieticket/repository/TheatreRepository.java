@@ -9,7 +9,6 @@ public interface TheatreRepository {
 
     Theatre save(Theatre theatre);
     Optional<Theatre> findById(long id);
-    List<Theatre> findAll();
     List<Theatre> findByAdminId(long adminId);
     void deleteById(long id);
     

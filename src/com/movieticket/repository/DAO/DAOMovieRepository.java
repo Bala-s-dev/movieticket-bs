@@ -85,6 +85,10 @@ public class DAOMovieRepository implements MovieRepository {
 
     @Override
     public void deleteById(long id) {
+        if(checkFutureShows(id)){
+            throw new IllegalArgumentException("Movie has future shows");
+        }
+
         String sql = "DELETE FROM movies WHERE id = ?";
 
         try (Connection conn = DatabaseManager.getConnection();
@@ -96,6 +100,27 @@ public class DAOMovieRepository implements MovieRepository {
         } catch (SQLException e) {
             System.err.println("Error deleting movie: " + e.getMessage());
         }
+    }
+
+    public boolean checkFutureShows(long id){
+        String sql = "SELECT * FROM shows WHERE movie_id = ? AND start_time >= CURRENT_TIMESTAMP()";
+
+        try (Connection conn = DatabaseManager.getConnection();
+                PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setLong(1, id);
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    return true;
+                }
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Error checking future shows: " + e.getMessage());
+        }
+
+        return false;
     }
 
     private Movie mapResultSetToMovie(ResultSet rs) throws SQLException {

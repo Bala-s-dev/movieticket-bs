@@ -56,23 +56,23 @@ public class DAOTheatrerepository implements  TheatreRepository{
         return Optional.empty();
     }
 
-    @Override
-    public List<Theatre> findAll() {
-        List<Theatre> theatres = new ArrayList<>();
-        String sql = "SELECT * FROM " + TABLE_NAME;
+    // @Override
+    // public List<Theatre> findAll() {
+    //     List<Theatre> theatres = new ArrayList<>();
+    //     String sql = "SELECT * FROM " + TABLE_NAME;
         
-        try (Connection conn = DatabaseManager.getConnection();
-                Statement stmt = conn.createStatement();
-                ResultSet rs = stmt.executeQuery(sql)) {
+    //     try (Connection conn = DatabaseManager.getConnection();
+    //             Statement stmt = conn.createStatement();
+    //             ResultSet rs = stmt.executeQuery(sql)) {
 
-            while (rs.next()) {
-                theatres.add(mapResultSetToTheatre(rs));
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException("Error finding all theatres: " + e.getMessage(), e);
-        }
-        return theatres;
-    }
+    //         while (rs.next()) {
+    //             theatres.add(mapResultSetToTheatre(rs));
+    //         }
+    //     } catch (SQLException e) {
+    //         throw new RuntimeException("Error finding all theatres: " + e.getMessage(), e);
+    //     }
+    //     return theatres;
+    // }
 
     @Override
     public List<Theatre> findByAdminId(long adminId) {
@@ -97,6 +97,10 @@ public class DAOTheatrerepository implements  TheatreRepository{
 
     @Override
     public void deleteById(long id) {
+        if(checkFutureShows(id)){
+            throw new IllegalArgumentException("Theatre has future shows");
+        }
+
         String sql = "DELETE FROM " + TABLE_NAME + " WHERE id = ?";
         
         try (Connection conn = DatabaseManager.getConnection();
@@ -110,6 +114,27 @@ public class DAOTheatrerepository implements  TheatreRepository{
         }
     }
 
+    public boolean checkFutureShows(long id){
+        String sql = "SELECT * FROM shows WHERE theatre_id = ? AND start_time >= CURRENT_TIMESTAMP()";
+
+        try (Connection conn = DatabaseManager.getConnection();
+                PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setLong(1, id);
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    return true;
+                }
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Error checking future shows: " + e.getMessage());
+        }
+
+        return false;
+    }
+    
     private Theatre mapResultSetToTheatre(ResultSet rs) throws SQLException {
         return new Theatre(
             rs.getLong("id"),

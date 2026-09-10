@@ -193,6 +193,10 @@ public class DAOScreenRepository implements ScreenRepository {
 
     @Override
     public void deleteById(long id) {
+        if(checkFutureShows(id)){
+            throw new IllegalArgumentException("Screen has future shows");
+        }
+        
         try (Connection conn = DatabaseManager.getConnection()) {
             
             try (PreparedStatement ps = conn.prepareStatement("DELETE FROM seats WHERE screen_id = ?")) {
@@ -207,6 +211,27 @@ public class DAOScreenRepository implements ScreenRepository {
         } catch (SQLException e) {
             throw new RuntimeException("Failed to delete screen: " + e.getMessage(), e);
         }
+    }
+
+    public boolean checkFutureShows(long id){
+        String sql = "SELECT * FROM shows WHERE screen_id = ? AND start_time >= CURRENT_TIMESTAMP()";
+
+        try (Connection conn = DatabaseManager.getConnection();
+                PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setLong(1, id);
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    return true;
+                }
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Error checking future shows: " + e.getMessage());
+        }
+
+        return false;
     }
 
     private Screen mapRow(ResultSet rs) throws SQLException {

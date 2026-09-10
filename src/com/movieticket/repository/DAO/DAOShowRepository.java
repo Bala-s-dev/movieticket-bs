@@ -157,6 +157,10 @@ public class DAOShowRepository implements ShowRepository {
 
     @Override
     public void deleteById(long id) {
+        if(checkAnyBooking(id)){
+            throw new IllegalArgumentException("Show has bookings");
+        }
+        
         String sql = "DELETE FROM shows WHERE id = ?";
         
         try (Connection conn = DatabaseManager.getConnection();
@@ -166,6 +170,27 @@ public class DAOShowRepository implements ShowRepository {
         } catch (SQLException e) {
             throw new RuntimeException("Failed to delete show: " + e.getMessage(), e);
         }
+    }
+
+    public boolean checkAnyBooking(long id){
+        String sql = "SELECT * FROM bookings WHERE show_id = ?";
+
+        try (Connection conn = DatabaseManager.getConnection();
+                PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setLong(1, id);
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    return true;
+                }
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Error checking any booking: " + e.getMessage());
+        }
+
+        return false;
     }
 
     private Show mapRow(ResultSet rs) throws SQLException {
