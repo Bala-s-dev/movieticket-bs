@@ -8,7 +8,6 @@ import com.movieticket.model.Show;
 import com.movieticket.model.TicketPricing;
 import com.movieticket.repository.ShowRepository;
 import com.movieticket.repository.ShowSeatRepository;
-import com.movieticket.util.IdGenerator;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -59,7 +58,7 @@ public class ShowService {
             throw new ValidationException("This screen already has an overlapping show in that time range.");
         }
 
-        Show show = new Show(IdGenerator.nextShowId(), movieId, screenId, start, end, pricing);
+        Show show = new Show(0, movieId, screenId, start, end, pricing);
         showRepository.save(show);
 
         List<Long> seatIds = screen.getAllSeats().stream().map(Seat::getSeatId).toList();

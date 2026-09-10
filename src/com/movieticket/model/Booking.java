@@ -8,7 +8,7 @@ import java.util.List;
 
 public class Booking {
     
-    private final long id;
+    private long id;
     private final long userId;
     private final long showId;
     private final LocalDateTime bookingDateTime;
@@ -29,6 +29,10 @@ public class Booking {
 
     public long getBookingId() { 
         return id; 
+    }
+
+    public void setBookingId(long id) {
+        this.id = id;
     }
     
     public long getUserId() { 

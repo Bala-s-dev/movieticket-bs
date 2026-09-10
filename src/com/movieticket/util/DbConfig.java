@@ -4,14 +4,12 @@ import java.io.InputStream;
 import java.util.Properties;
 
 public class DbConfig {
-
     private final Properties properties;
     private final String url;
     private final String user;
     private final String password;
 
     public DbConfig() {
-
         properties = new Properties();
 
         try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream("db.properties")) {

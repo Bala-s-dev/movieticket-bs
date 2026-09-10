@@ -5,8 +5,8 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public final class DatabaseManager {
-
     private static final DbConfig config = new DbConfig();
+    public static Connection conn;
 
     static {
         try {
@@ -22,17 +22,24 @@ public final class DatabaseManager {
 
     public static Connection getConnection() {
         try {
-            return DriverManager.getConnection(
+            conn = DriverManager.getConnection(
                 config.getUrl(),
                 config.getUser(),
                 config.getPassword()
             );
+            return conn;
         } catch (SQLException e) {
             throw new RuntimeException("Failed to connect to database", e);
         }
     }
 
     public static void closeConnection() {
-        // Maintained for backward compatibility
+        try {
+            if (conn != null && !conn.isClosed()) {
+                conn.close();
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to close database connection", e);
+        }
     }
 }

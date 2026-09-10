@@ -13,7 +13,6 @@ import com.movieticket.model.Show;
 import com.movieticket.model.ShowSeat;
 import com.movieticket.repository.BookingRepository;
 import com.movieticket.repository.ShowSeatRepository;
-import com.movieticket.util.IdGenerator;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -96,7 +95,7 @@ public class BookingService {
             seatIds.add(seat.getSeatId());
         }
 
-        Booking booking = new Booking(IdGenerator.nextBookingId(), userId, showId,
+        Booking booking = new Booking(0, userId, showId,
                 LocalDateTime.now(), seatIds, total);
             
         return bookingRepository.save(booking);

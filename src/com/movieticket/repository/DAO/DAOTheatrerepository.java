@@ -14,7 +14,7 @@ public class DAOTheatrerepository implements  TheatreRepository{
     
     @Override
     public Theatre save(Theatre theatre) {
-        String sql = "INSERT INTO " + TABLE_NAME + " (name, location, admin_id, is_active) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO " + TABLE_NAME + " (name, location, admin_id, active) VALUES (?, ?, ?, ?)";
         try (Connection conn = DatabaseManager.getConnection();
                 PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
@@ -113,7 +113,7 @@ public class DAOTheatrerepository implements  TheatreRepository{
             rs.getString("name"),
             rs.getString("location"),
             rs.getLong("admin_id"),
-            rs.getBoolean("is_active")
+            rs.getBoolean("active")
         );
     }
 }

@@ -115,7 +115,17 @@ public class DAOUserRepository implements UserRepository {
 
 	@Override
 	public List<User> findAll() {
-		// TODO
-		throw new UnsupportedOperationException("Unimplemented method 'findAll'");
+		String sql = "SELECT * FROM users";
+		List<User> users = new java.util.ArrayList<>();
+		try (Connection conn = DatabaseManager.getConnection();
+			 PreparedStatement ps = conn.prepareStatement(sql);
+			 ResultSet rs = ps.executeQuery()) {
+			while (rs.next()) {
+				users.add(mapRow(rs));
+			}
+			return users;
+		} catch (SQLException e) {
+			throw new RuntimeException("Failed to fetch users: " + e.getMessage(), e);
+		}
 	}
 }

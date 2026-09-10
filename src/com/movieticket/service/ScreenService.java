@@ -8,7 +8,6 @@ import com.movieticket.model.Seat;
 import com.movieticket.model.Theatre;
 import com.movieticket.repository.ScreenRepository;
 import com.movieticket.repository.ShowRepository;
-import com.movieticket.util.IdGenerator;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -63,13 +62,13 @@ public class ScreenService {
             }
         }
 
-        Screen screen = new Screen(IdGenerator.nextScreenId(), screenName, theatreId);
+        Screen screen = new Screen(0, screenName, theatreId);
 
         for (RowConfig rowConfig : rowConfigs) {
             List<Seat> seats = new ArrayList<>();
 
             for (int seatNumber = 1; seatNumber <= rowConfig.seatCount; seatNumber++) {
-                seats.add(new Seat(IdGenerator.nextSeatId(), screen.getScreenId(), rowConfig.row,
+                seats.add(new Seat(0, screen.getScreenId(), rowConfig.row,
                         seatNumber, rowConfig.category));
             }
             screen.addRow(rowConfig.row, seats);

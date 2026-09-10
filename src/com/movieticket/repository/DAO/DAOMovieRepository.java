@@ -41,7 +41,7 @@ public class DAOMovieRepository implements MovieRepository {
 
     @Override
     public Optional<Movie> findById(long id) {
-        String sql = "SELECT * FROM movies WHERE movie_id = ?";
+        String sql = "SELECT * FROM movies WHERE id = ?";
         Movie movie = null;
 
         try (Connection conn = DatabaseManager.getConnection();
@@ -84,7 +84,7 @@ public class DAOMovieRepository implements MovieRepository {
 
     @Override
     public void deleteById(long id) {
-        String sql = "DELETE FROM movies WHERE movie_id = ?";
+        String sql = "DELETE FROM movies WHERE id = ?";
 
         try (Connection conn = DatabaseManager.getConnection();
                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -99,7 +99,7 @@ public class DAOMovieRepository implements MovieRepository {
 
     private Movie mapResultSetToMovie(ResultSet rs) throws SQLException {
         Movie movie = new Movie();
-        movie.setMovieId(rs.getLong("movie_id"));
+        movie.setMovieId(rs.getLong("id"));
         movie.setName(rs.getString("name"));
         movie.setDescription(rs.getString("description"));
         movie.setLanguage(rs.getString("language"));

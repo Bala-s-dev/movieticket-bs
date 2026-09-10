@@ -26,6 +26,10 @@ public class Show {
     public long getShowId() { 
         return id; 
     }
+
+    public void setShowId(long id) {
+        this.id = id;
+    }
     
     public long getMovieId() { 
         return movieId; 

@@ -32,7 +32,7 @@ CREATE TABLE theatres (
     location            VARCHAR(200) NOT NULL,
     admin_id            BIGINT NOT NULL,
     active              BOOLEAN NOT NULL DEFAULT TRUE,
-    CONSTRAINT fk_theatre_admin FOREIGN KEY (admin_id) REFERENCES admins(admin_id)
+    CONSTRAINT fk_theatre_admin FOREIGN KEY (admin_id) REFERENCES admins(id)
 );
 
 CREATE TABLE screens (
@@ -40,7 +40,7 @@ CREATE TABLE screens (
     screen_name         VARCHAR(100) NOT NULL,
     theatre_id          BIGINT NOT NULL,
     active              BOOLEAN NOT NULL DEFAULT TRUE,
-    CONSTRAINT fk_screen_theatre FOREIGN KEY (theatre_id) REFERENCES theatres(theatre_id)
+    CONSTRAINT fk_screen_theatre FOREIGN KEY (theatre_id) REFERENCES theatres(id)
 );
 
 CREATE TABLE seats (
@@ -50,7 +50,7 @@ CREATE TABLE seats (
     seat_number         INT NOT NULL,
     category            VARCHAR(10) NOT NULL,
     row_order           INT NOT NULL,
-    CONSTRAINT fk_seat_screen FOREIGN KEY (screen_id) REFERENCES screens(screen_id),
+    CONSTRAINT fk_seat_screen FOREIGN KEY (screen_id) REFERENCES screens(id),
     UNIQUE KEY uq_seat_label (screen_id, row_letter, seat_number)
 );
 
@@ -64,8 +64,8 @@ CREATE TABLE shows (
     price_platinum      DOUBLE NOT NULL,
     price_silver        DOUBLE NOT NULL,
     active              BOOLEAN NOT NULL DEFAULT TRUE,
-    CONSTRAINT fk_show_movie FOREIGN KEY (movie_id) REFERENCES movies(movie_id),
-    CONSTRAINT fk_show_screen FOREIGN KEY (screen_id) REFERENCES screens(screen_id)
+    CONSTRAINT fk_show_movie FOREIGN KEY (movie_id) REFERENCES movies(id),
+    CONSTRAINT fk_show_screen FOREIGN KEY (screen_id) REFERENCES screens(id)
 );
 
 
@@ -74,8 +74,8 @@ CREATE TABLE show_seats (
     seat_id             BIGINT NOT NULL,
     status              VARCHAR(10) NOT NULL DEFAULT 'AVAILABLE',
     PRIMARY KEY (show_id, seat_id),
-    CONSTRAINT fk_showseat_show FOREIGN KEY (show_id) REFERENCES shows(show_id),
-    CONSTRAINT fk_showseat_seat FOREIGN KEY (seat_id) REFERENCES seats(seat_id)
+    CONSTRAINT fk_showseat_show FOREIGN KEY (show_id) REFERENCES shows(id),
+    CONSTRAINT fk_showseat_seat FOREIGN KEY (seat_id) REFERENCES seats(id)
 );
 
 CREATE TABLE bookings (
@@ -85,14 +85,14 @@ CREATE TABLE bookings (
     booking_datetime    DATETIME NOT NULL,
     total_amount        DOUBLE NOT NULL,
     status              VARCHAR(10) NOT NULL,
-    CONSTRAINT fk_booking_user FOREIGN KEY (user_id) REFERENCES users(user_id),
-    CONSTRAINT fk_booking_show FOREIGN KEY (show_id) REFERENCES shows(show_id)
+    CONSTRAINT fk_booking_user FOREIGN KEY (user_id) REFERENCES users(id),
+    CONSTRAINT fk_booking_show FOREIGN KEY (show_id) REFERENCES shows(id)
 );
 
 CREATE TABLE booking_seats (    
     booking_id          BIGINT NOT NULL,
     seat_id             BIGINT NOT NULL,
     PRIMARY KEY (booking_id, seat_id),
-    CONSTRAINT fk_bs_booking FOREIGN KEY (booking_id) REFERENCES bookings(booking_id),
-    CONSTRAINT fk_bs_seat FOREIGN KEY (seat_id) REFERENCES seats(seat_id)
+    CONSTRAINT fk_bs_booking FOREIGN KEY (booking_id) REFERENCES bookings(id),
+    CONSTRAINT fk_bs_seat FOREIGN KEY (seat_id) REFERENCES seats(id)
 );
