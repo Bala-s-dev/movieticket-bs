@@ -79,7 +79,7 @@ public class DAOShowRepository implements ShowRepository {
 
     @Override
     public Optional<Show> findById(long id) {
-        String sql = "SELECT * FROM shows WHERE id = ?";
+        String sql = "SELECT * FROM shows WHERE id = ? AND start_datetime >= CURRENT_TIMESTAMP()";
         
         try (Connection conn = DatabaseManager.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -98,7 +98,7 @@ public class DAOShowRepository implements ShowRepository {
 
     @Override
     public List<Show> findAll() {
-        String sql = "SELECT * FROM shows";
+        String sql = "SELECT * FROM shows WHERE start_datetime >= CURRENT_TIMESTAMP()";
         List<Show> shows = new ArrayList<>();
         
         try (Connection conn = DatabaseManager.getConnection();
@@ -116,7 +116,7 @@ public class DAOShowRepository implements ShowRepository {
 
     @Override
     public List<Show> findByScreenId(long screenId) {
-        String sql = "SELECT * FROM shows WHERE screen_id = ?";
+        String sql = "SELECT * FROM shows WHERE screen_id = ? AND start_datetime >= CURRENT_TIMESTAMP()";
         List<Show> shows = new ArrayList<>();
         
         try (Connection conn = DatabaseManager.getConnection();
@@ -137,7 +137,7 @@ public class DAOShowRepository implements ShowRepository {
 
     @Override
     public List<Show> findByMovieId(long movieId) {
-        String sql = "SELECT * FROM shows WHERE movie_id = ?";
+        String sql = "SELECT * FROM shows WHERE movie_id = ? AND start_datetime >= CURRENT_TIMESTAMP()";
         List<Show> shows = new ArrayList<>();
         
         try (Connection conn = DatabaseManager.getConnection();
