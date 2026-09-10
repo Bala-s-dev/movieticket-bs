@@ -15,6 +15,7 @@ public class DAOTheatrerepository implements  TheatreRepository{
     @Override
     public Theatre save(Theatre theatre) {
         String sql = "INSERT INTO " + TABLE_NAME + " (name, location, admin_id, active) VALUES (?, ?, ?, ?)";
+        
         try (Connection conn = DatabaseManager.getConnection();
                 PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
@@ -39,9 +40,9 @@ public class DAOTheatrerepository implements  TheatreRepository{
     @Override
     public Optional<Theatre> findById(long id) {
         String sql = "SELECT * FROM " + TABLE_NAME + " WHERE id = ?";
+        
         try (Connection conn = DatabaseManager.getConnection();
                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
-
             pstmt.setLong(1, id);
 
             try (ResultSet rs = pstmt.executeQuery()) {
@@ -59,6 +60,7 @@ public class DAOTheatrerepository implements  TheatreRepository{
     public List<Theatre> findAll() {
         List<Theatre> theatres = new ArrayList<>();
         String sql = "SELECT * FROM " + TABLE_NAME;
+        
         try (Connection conn = DatabaseManager.getConnection();
                 Statement stmt = conn.createStatement();
                 ResultSet rs = stmt.executeQuery(sql)) {
@@ -96,6 +98,7 @@ public class DAOTheatrerepository implements  TheatreRepository{
     @Override
     public void deleteById(long id) {
         String sql = "DELETE FROM " + TABLE_NAME + " WHERE id = ?";
+        
         try (Connection conn = DatabaseManager.getConnection();
                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
 

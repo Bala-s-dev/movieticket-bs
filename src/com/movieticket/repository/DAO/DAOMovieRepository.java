@@ -14,6 +14,7 @@ public class DAOMovieRepository implements MovieRepository {
     @Override
     public Movie save(Movie movie) {
         String sql = "INSERT INTO movies (name, description, language, genre, duration_minutes, release_date, active) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        
         try (Connection conn = DatabaseManager.getConnection();
                 PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
@@ -41,7 +42,7 @@ public class DAOMovieRepository implements MovieRepository {
 
     @Override
     public Optional<Movie> findById(long id) {
-        String sql = "SELECT * FROM movies WHERE id = ?";
+        String sql = "SELECT * FROM movies WHERE id = ? AND active=true AND release_date>=CURRENT_DATE()";
         Movie movie = null;
 
         try (Connection conn = DatabaseManager.getConnection();
@@ -65,7 +66,7 @@ public class DAOMovieRepository implements MovieRepository {
     @Override
     public List<Movie> findAll() {
         List<Movie> movies = new ArrayList<>();
-        String sql = "SELECT * FROM movies";
+        String sql = "SELECT * FROM movies WHERE active=true AND release_date>=CURRENT_DATE()";
 
         try (Connection conn = DatabaseManager.getConnection();
                 Statement stmt = conn.createStatement();

@@ -7,7 +7,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
 import java.util.Optional;
 import java.sql.Statement;
 
@@ -51,9 +50,11 @@ public class DAOUserRepository implements UserRepository {
     @Override
     public Optional<User> findById(long id) {
         String sql = "SELECT * FROM users WHERE id = ?";
+        
         try (Connection conn = DatabaseManager.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setLong(1, id);
+            
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     return Optional.of(mapRow(rs));
@@ -68,9 +69,11 @@ public class DAOUserRepository implements UserRepository {
     @Override
     public Optional<User> findByEmail(String email) {
         String sql = "SELECT * FROM users WHERE email = ?";
+        
         try (Connection conn = DatabaseManager.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, email);
+            
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     return Optional.of(mapRow(rs));
@@ -113,19 +116,4 @@ public class DAOUserRepository implements UserRepository {
         );
     }
 
-	@Override
-	public List<User> findAll() {
-		String sql = "SELECT * FROM users";
-		List<User> users = new java.util.ArrayList<>();
-		try (Connection conn = DatabaseManager.getConnection();
-			 PreparedStatement ps = conn.prepareStatement(sql);
-			 ResultSet rs = ps.executeQuery()) {
-			while (rs.next()) {
-				users.add(mapRow(rs));
-			}
-			return users;
-		} catch (SQLException e) {
-			throw new RuntimeException("Failed to fetch users: " + e.getMessage(), e);
-		}
-	}
 }

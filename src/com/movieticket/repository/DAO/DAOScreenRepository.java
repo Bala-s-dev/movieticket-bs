@@ -39,6 +39,7 @@ public class DAOScreenRepository implements ScreenRepository {
 
     private void insertScreen(Connection conn, Screen screen) throws SQLException {
         String sql = "INSERT INTO screens (screen_name, theatre_id, active) VALUES (?, ?, ?)";
+        
         try (PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             ps.setString(1, screen.getScreenName());
             ps.setLong(2, screen.getTheatreId());
@@ -55,6 +56,7 @@ public class DAOScreenRepository implements ScreenRepository {
 
     private void updateScreen(Connection conn, Screen screen) throws SQLException {
         String sql = "UPDATE screens SET screen_name = ?, theatre_id = ?, active = ? WHERE id = ?";
+        
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, screen.getScreenName());
             ps.setLong(2, screen.getTheatreId());
@@ -65,8 +67,6 @@ public class DAOScreenRepository implements ScreenRepository {
     }
 
     private void saveSeats(Connection conn, Screen screen) throws SQLException {
-        // Seats already persisted (have a real id) get their row/category/order updated in place.
-        // New seats (id == 0) are inserted and get their generated id written back onto the object.
         String updateSql = "UPDATE seats SET row_letter = ?, seat_number = ?, category = ?, row_order = ? WHERE id = ?";
         String insertSql = "INSERT INTO seats (screen_id, row_letter, seat_number, category, row_order) " +
                 "VALUES (?, ?, ?, ?, ?)";
@@ -77,8 +77,11 @@ public class DAOScreenRepository implements ScreenRepository {
         try (PreparedStatement updatePs = conn.prepareStatement(updateSql)) {
             int rowOrder = 0;
             boolean hasUpdates = false;
+            
             for (Map.Entry<Character, List<Seat>> rowEntry : screen.getSeatLayout().entrySet()) {
+                
                 for (Seat seat : rowEntry.getValue()) {
+                    
                     if (seat.getSeatId() == 0) {
                         newSeats.add(seat);
                         newSeatRowOrders.add(rowOrder);
@@ -94,6 +97,7 @@ public class DAOScreenRepository implements ScreenRepository {
                 }
                 rowOrder++;
             }
+
             if (hasUpdates) {
                 updatePs.executeBatch();
             }
@@ -117,6 +121,7 @@ public class DAOScreenRepository implements ScreenRepository {
 
             try (ResultSet generatedKeys = insertPs.getGeneratedKeys()) {
                 int i = 0;
+                
                 while (generatedKeys.next() && i < newSeats.size()) {
                     newSeats.get(i).setSeatId(generatedKeys.getLong(1));
                     i++;
@@ -128,9 +133,11 @@ public class DAOScreenRepository implements ScreenRepository {
     @Override
     public Optional<Screen> findById(long id) {
         String sql = "SELECT id, screen_name, theatre_id, active FROM screens WHERE id = ?";
+        
         try (Connection conn = DatabaseManager.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setLong(1, id);
+            
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     Screen screen = mapRow(rs);
@@ -147,10 +154,12 @@ public class DAOScreenRepository implements ScreenRepository {
     @Override
     public List<Screen> findAll() {
         String sql = "SELECT id, screen_name, theatre_id, active FROM screens";
+        
         try (Connection conn = DatabaseManager.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
             List<Screen> screens = new ArrayList<>();
+            
             while (rs.next()) {
                 Screen screen = mapRow(rs);
                 loadSeats(conn, screen);
@@ -185,10 +194,12 @@ public class DAOScreenRepository implements ScreenRepository {
     @Override
     public void deleteById(long id) {
         try (Connection conn = DatabaseManager.getConnection()) {
+            
             try (PreparedStatement ps = conn.prepareStatement("DELETE FROM seats WHERE screen_id = ?")) {
                 ps.setLong(1, id);
                 ps.executeUpdate();
             }
+            
             try (PreparedStatement ps = conn.prepareStatement("DELETE FROM screens WHERE id = ?")) {
                 ps.setLong(1, id);
                 ps.executeUpdate();
@@ -210,8 +221,10 @@ public class DAOScreenRepository implements ScreenRepository {
 
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setLong(1, screen.getScreenId());
+            
             try (ResultSet rs = ps.executeQuery()) {
                 Map<Character, List<Seat>> grouped = new LinkedHashMap<>();
+                
                 while (rs.next()) {
                     char row = rs.getString("row_letter").charAt(0);
                     Seat seat = new Seat(
@@ -223,6 +236,7 @@ public class DAOScreenRepository implements ScreenRepository {
                     );
                     grouped.computeIfAbsent(row, k -> new ArrayList<>()).add(seat);
                 }
+                
                 for (Map.Entry<Character, List<Seat>> entry : grouped.entrySet()) {
                     screen.addRow(entry.getKey(), entry.getValue());
                 }

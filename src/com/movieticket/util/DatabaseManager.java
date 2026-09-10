@@ -32,14 +32,4 @@ public final class DatabaseManager {
             throw new RuntimeException("Failed to connect to database", e);
         }
     }
-
-    public static void closeConnection() {
-        try {
-            if (conn != null && !conn.isClosed()) {
-                conn.close();
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException("Failed to close database connection", e);
-        }
-    }
 }

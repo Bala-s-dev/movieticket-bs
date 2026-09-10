@@ -13,7 +13,7 @@ public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         InputUtil input = new InputUtil(scanner);
-
+        
         UserRepository userRepository = new DAOUserRepository();
         AdminRepository adminRepository = new DAOAdminRepository();
         MovieRepository movieRepository = new DAOMovieRepository();

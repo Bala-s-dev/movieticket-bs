@@ -55,6 +55,7 @@ public class DAOBookingRepository implements BookingRepository {
 
     private Booking updateStatus(Booking booking) {
         String sql = "UPDATE bookings SET status = ? WHERE id = ?";
+        
         try (Connection conn = DatabaseManager.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, booking.getStatus().name());
@@ -68,6 +69,7 @@ public class DAOBookingRepository implements BookingRepository {
 
     private void saveBookingSeats(Connection conn, Booking booking) throws SQLException {
         String sql = "INSERT IGNORE INTO booking_seats (booking_id, seat_id) VALUES (?, ?)";
+        
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             for (Long seatId : booking.getSeatIds()) {
                 ps.setLong(1, booking.getBookingId());
@@ -81,9 +83,11 @@ public class DAOBookingRepository implements BookingRepository {
     @Override
     public Optional<Booking> findById(long id) {
         String sql = "SELECT * FROM bookings WHERE id = ?";
+        
         try (Connection conn = DatabaseManager.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setLong(1, id);
+            
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     return Optional.of(mapRow(conn, rs));
@@ -99,9 +103,11 @@ public class DAOBookingRepository implements BookingRepository {
     public List<Booking> findAll() {
         String sql = "SELECT * FROM bookings";
         List<Booking> bookings = new ArrayList<>();
+        
         try (Connection conn = DatabaseManager.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery()) {
+            
             while (rs.next()) {
                 bookings.add(mapRow(conn, rs));
             }
@@ -115,10 +121,13 @@ public class DAOBookingRepository implements BookingRepository {
     public List<Booking> findByUserId(long userId) {
         String sql = "SELECT * FROM bookings WHERE user_id = ?";
         List<Booking> bookings = new ArrayList<>();
+        
         try (Connection conn = DatabaseManager.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setLong(1, userId);
+            
             try (ResultSet rs = ps.executeQuery()) {
+                
                 while (rs.next()) {
                     bookings.add(mapRow(conn, rs));
                 }
@@ -133,9 +142,11 @@ public class DAOBookingRepository implements BookingRepository {
     public List<Booking> findByShowId(long showId) {
         String sql = "SELECT * FROM bookings WHERE show_id = ?";
         List<Booking> bookings = new ArrayList<>();
+        
         try (Connection conn = DatabaseManager.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setLong(1, showId);
+            
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     bookings.add(mapRow(conn, rs));
@@ -150,8 +161,10 @@ public class DAOBookingRepository implements BookingRepository {
     private List<Long> findSeatIds(Connection conn, long bookingId) throws SQLException {
         String sql = "SELECT seat_id FROM booking_seats WHERE booking_id = ?";
         List<Long> seatIds = new ArrayList<>();
+        
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setLong(1, bookingId);
+            
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     seatIds.add(rs.getLong("seat_id"));

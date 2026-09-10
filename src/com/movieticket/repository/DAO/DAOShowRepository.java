@@ -80,9 +80,11 @@ public class DAOShowRepository implements ShowRepository {
     @Override
     public Optional<Show> findById(long id) {
         String sql = "SELECT * FROM shows WHERE id = ?";
+        
         try (Connection conn = DatabaseManager.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setLong(1, id);
+            
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     return Optional.of(mapRow(rs));
@@ -98,9 +100,11 @@ public class DAOShowRepository implements ShowRepository {
     public List<Show> findAll() {
         String sql = "SELECT * FROM shows";
         List<Show> shows = new ArrayList<>();
+        
         try (Connection conn = DatabaseManager.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
+        
             while (rs.next()) {
                 shows.add(mapRow(rs));
             }
@@ -114,10 +118,13 @@ public class DAOShowRepository implements ShowRepository {
     public List<Show> findByScreenId(long screenId) {
         String sql = "SELECT * FROM shows WHERE screen_id = ?";
         List<Show> shows = new ArrayList<>();
+        
         try (Connection conn = DatabaseManager.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setLong(1, screenId);
+            
             try (ResultSet rs = ps.executeQuery()) {
+                
                 while (rs.next()) {
                     shows.add(mapRow(rs));
                 }
@@ -132,9 +139,11 @@ public class DAOShowRepository implements ShowRepository {
     public List<Show> findByMovieId(long movieId) {
         String sql = "SELECT * FROM shows WHERE movie_id = ?";
         List<Show> shows = new ArrayList<>();
+        
         try (Connection conn = DatabaseManager.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setLong(1, movieId);
+            
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     shows.add(mapRow(rs));
@@ -149,6 +158,7 @@ public class DAOShowRepository implements ShowRepository {
     @Override
     public void deleteById(long id) {
         String sql = "DELETE FROM shows WHERE id = ?";
+        
         try (Connection conn = DatabaseManager.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setLong(1, id);

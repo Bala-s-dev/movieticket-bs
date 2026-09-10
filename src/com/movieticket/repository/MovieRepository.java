@@ -1,16 +1,16 @@
 package com.movieticket.repository;
 
 import com.movieticket.model.Movie;
-import java.util.Collection;
+// import java.util.Collection;
 
-// import java.util.List;
+import java.util.List;
 import java.util.Optional;
 
 public interface MovieRepository {
 
     Movie save(Movie movie);
     Optional<Movie> findById(long id);
-    Collection<Movie> findAll();
+    List<Movie> findAll();
     void deleteById(long id);
     
 }

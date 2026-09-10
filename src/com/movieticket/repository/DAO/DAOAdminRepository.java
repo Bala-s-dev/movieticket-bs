@@ -50,9 +50,11 @@ public class DAOAdminRepository implements AdminRepository {
     @Override
     public Optional<Admin> findById(long id) {
         String sql = "SELECT * FROM admins WHERE id = ?";
+        
         try (Connection conn = DatabaseManager.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setLong(1, id);
+            
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     return Optional.of(mapRow(rs));
@@ -67,9 +69,11 @@ public class DAOAdminRepository implements AdminRepository {
     @Override
     public Optional<Admin> findByEmail(String email) {
         String sql = "SELECT * FROM admins WHERE email = ?";
+        
         try (Connection conn = DatabaseManager.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, email);
+                
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     return Optional.of(mapRow(rs));

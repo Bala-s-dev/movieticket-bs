@@ -19,7 +19,8 @@ public class DAOShowSeatRepository implements ShowSeatRepository {
     public ShowSeat save(ShowSeat showSeat) {
         String sql = "INSERT INTO show_seats (show_id, seat_id, status) VALUES (?, ?, ?) " +
                 "ON DUPLICATE KEY UPDATE status = VALUES(status)";
-        try (Connection conn = DatabaseManager.getConnection();
+        
+                try (Connection conn = DatabaseManager.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setLong(1, showSeat.getShowId());
             ps.setLong(2, showSeat.getSeatId());
@@ -34,10 +35,12 @@ public class DAOShowSeatRepository implements ShowSeatRepository {
     @Override
     public Optional<ShowSeat> findByShowIdAndSeatId(long showId, long seatId) {
         String sql = "SELECT show_id, seat_id, status FROM show_seats WHERE show_id = ? AND seat_id = ?";
+        
         try (Connection conn = DatabaseManager.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setLong(1, showId);
             ps.setLong(2, seatId);
+            
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     return Optional.of(mapRow(rs));
@@ -53,14 +56,17 @@ public class DAOShowSeatRepository implements ShowSeatRepository {
     public List<ShowSeat> findByShowId(long showId) {
         String sql = "SELECT show_id, seat_id, status FROM show_seats WHERE show_id = ?";
         List<ShowSeat> result = new ArrayList<>();
+        
         try (Connection conn = DatabaseManager.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setLong(1, showId);
+            
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     result.add(mapRow(rs));
                 }
             }
+            
             return result;
         } catch (SQLException e) {
             throw new RuntimeException("Failed to fetch show seats: " + e.getMessage(), e);
@@ -70,8 +76,10 @@ public class DAOShowSeatRepository implements ShowSeatRepository {
     @Override
     public void initializeForShow(long showId, List<Long> seatIds) {
         String sql = "INSERT IGNORE INTO show_seats (show_id, seat_id, status) VALUES (?, ?, ?)";
+        
         try (Connection conn = DatabaseManager.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
+
             for (Long seatId : seatIds) {
                 ps.setLong(1, showId);
                 ps.setLong(2, seatId);
@@ -86,6 +94,7 @@ public class DAOShowSeatRepository implements ShowSeatRepository {
 
     private ShowSeat mapRow(ResultSet rs) throws SQLException {
         ShowSeat showSeat = new ShowSeat(rs.getLong("show_id"), rs.getLong("seat_id"));
+        
         if (SeatStatus.valueOf(rs.getString("status")) == SeatStatus.BOOKED) {
             showSeat.markBooked();
         }
